@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: gg_customer_api
+
+  profiles:
+    active: dev
+
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.0.99:8848
+        namespace: ed9ea14a-fdbd-4a79-99ef-847f926b7daa
+        file-extension: yaml
+        prefix: gg_customer_api
+
+      discovery:
+        server-addr: 192.168.0.99:8848
+        namespace: ed9ea14a-fdbd-4a79-99ef-847f926b7daa
+        ip: 192.168.0.99
+        port: 8002
+
+  config:
+    import:
+      - optional:nacos:gg_customer_api-dev.yaml
+
+logging:
+  level:
+    com.alibaba.nacos: DEBUG
