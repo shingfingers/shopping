@@ -1,0 +1,61 @@
+// 全局SCSS变量
+$primary-color: #409EFF;
+$success-color: #67C23A;
+$warning-color: #E6A23C;
+$danger-color: #F56C6C;
+$info-color: #909399;
+
+// 颜色
+$text-primary: #303133;
+$text-regular: #606266;
+$text-secondary: #909399;
+$text-placeholder: #C0C4CC;
+$border-color: #DCDFE6;
+$border-color-light: #E4E7ED;
+$bg-color: #F5F7FA;
+$bg-color-grey: #EFEFEF;
+$bg-color-dark: #1a1a2e;
+
+// 字体
+$font-size-base: 14px;
+$font-size-small: 12px;
+$font-size-large: 16px;
+$font-size-title: 18px;
+$font-size-header: 20px;
+
+// 间距
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 20px;
+$spacing-xxl: 24px;
+$spacing-xxxl: 32px;
+
+// 圆角
+$border-radius-base: 4px;
+$border-radius-small: 8px;
+$border-radius-large: 12px;
+$border-radius-round: 50%;
+
+// 阴影
+$shadow-base: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-light: 0 2px 8px rgba(0, 0, 0, 0.08);
+$shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.15);
+$shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+// 过渡动画
+$transition-base: all 0.3s ease;
+$transition-fast: all 0.2s ease;
+$transition-slow: all 0.4s ease;
+
+// 布局
+$layout-width: 1200px;
+$header-height: 160px;
+
+// z-index 层级
+$z-dropdown: 100;
+$z-sticky: 200;
+$z-fixed: 500;
+$z-modal: 1000;
+$z-tooltip: 2000;
