@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: user_service
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.0.99:8848
+        namespace: ed9ea14a-fdbd-4a79-99ef-847f926b7daa
+        file-extension: yaml
+        prefix: user_service
+      discovery:
+        server-addr: 192.168.0.99:8848
+        namespace: ed9ea14a-fdbd-4a79-99ef-847f926b7daa
+  config:
+    import:
+      - optional:nacos:user_service-dev.yaml
+logging:
+  level:
+    com.alibaba.nacos: DEBUG
+
+dubbo:
+  protocol:
+    prefer-serialization: hessian2
+  provider:
+    serialization: hessian2
+    timeout: 30000  # 30秒超时
