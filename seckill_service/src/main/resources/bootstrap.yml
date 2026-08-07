@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: seckill_service
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.0.99:8848
+        namespace: ed9ea14a-fdbd-4a79-99ef-847f926b7daa
+        file-extension: yaml
+        prefix: seckill_service
+      discovery:
+        server-addr: 192.168.0.99:8848
+        namespace: ed9ea14a-fdbd-4a79-99ef-847f926b7daa
+  config:
+    import:
+      - optional:nacos:seckill_service-dev.yaml
+logging:
+  level:
+    com.alibaba.nacos: DEBUG
