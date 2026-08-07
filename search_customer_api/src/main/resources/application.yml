@@ -1,0 +1,7 @@
+﻿# Dubbo 序列化：允许自定义异常(BusException)跨 Dubbo 原样传输，避免业务异常变 500
+dubbo:
+  application:
+    serialize-check-status: DISABLE
+    check-serializable: false
+  protocol:
+    prefer-serialization: hessian2
