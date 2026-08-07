@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: goods_service
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.0.99:8848
+        namespace: ed9ea14a-fdbd-4a79-99ef-847f926b7daa
+        file-extension: yaml
+        prefix: goods_service
+  config:
+    import:
+      - optional:nacos:goods_service-dev.yaml
+logging:
+  level:
+    com.alibaba.nacos: DEBUG
+rocketmq:
+  name-server: 192.168.0.99:9876
+  producer:
+    group: goods_service
+
+dubbo:
+  protocol:
+    prefer-serialization: hessian2
+  provider:
+    serialization: hessian2
+    timeout: 30000
+  consumer:
+    timeout: 30000
