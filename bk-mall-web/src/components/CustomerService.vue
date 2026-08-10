@@ -40,6 +40,9 @@
             </div>
             <div class="cs-bubble">
               <div class="cs-text">{{ msg.content }}</div>
+              <div v-if="msg.action" class="cs-action">
+                <el-button type="primary" size="small" round @click="confirmBuyNow(msg.action)">立即购买《{{ msg.action.name }}》</el-button>
+              </div>
               <div class="cs-time">{{ formatTime(msg.createdAt) }}</div>
             </div>
           </div>
@@ -98,12 +101,14 @@
 
 <script setup>
 import { ref, nextTick, watch, onMounted, onUnmounted } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { Promotion } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
 import request from '@/api/request'
 import { getToken } from '@/utils/auth'
 
 // ============= 状态 =============
+const router = useRouter()
 const panelVisible = ref(false)
 const minimized = ref(false)
 const inputText = ref('')
@@ -223,10 +228,15 @@ async function sendMessage(text) {
     // 处理响应
     const answer = res?.data || (typeof res === 'string' ? res : null)
     if (answer) {
+      // 解析 BUY_NOW 标记（立即购买跳转，需用户同意）
+      const actionMatch = answer.match(/【BUY_NOW:(\d+):([^】]+)】/)
+      const action = actionMatch ? { id: actionMatch[1], name: actionMatch[2] } : null
+      const cleanAnswer = action ? answer.replace(/【BUY_NOW:[^】]*】/g, '') : answer
       messages.value.push({
         id: messages.value.length + 1,
         role: 'assistant',
-        content: answer,
+        content: cleanAnswer,
+        action,
         createdAt: Date.now(),
       })
     } else {
@@ -244,6 +254,26 @@ async function sendMessage(text) {
   } finally {
     isThinking.value = false
     scrollToBottom()
+  }
+}
+
+// 立即购买确认（需用户同意后跳转订单确认页）
+async function confirmBuyNow(action) {
+  if (!action) return
+  try {
+    await ElMessageBox.confirm(
+      `确认立即购买《${action.name}》吗？`,
+      '确认购买',
+      { confirmButtonText: '去购买', cancelButtonText: '再想想', type: 'info' }
+    )
+    if (!getToken()) {
+      ElMessage.warning('请先登录')
+      router.push({ name: 'Login' })
+      return
+    }
+    router.push({ name: 'OrderConfirm', query: { productId: action.id, quantity: 1 } })
+  } catch {
+    // 用户取消，不跳转
   }
 }
 
