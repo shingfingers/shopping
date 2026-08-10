@@ -318,7 +318,7 @@ onMounted(() => {
 }
 
 .section-inner {
-  width: 1200px;
+  width: $layout-width;
   margin: 0 auto;
   padding: 0 20px 40px;
 }
@@ -383,6 +383,7 @@ onMounted(() => {
   border-radius: $border-radius-small;
   padding: 20px 24px;
   margin-bottom: 16px;
+  border: 1px solid $border-color-light;
 }
 
 .block-title {
@@ -391,7 +392,7 @@ onMounted(() => {
   color: $text-primary;
   margin: 0 0 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid $border-color-light;
 }
 
 .info-grid {
@@ -431,12 +432,12 @@ onMounted(() => {
 
   thead {
     th {
-      background: #fafafa;
+      background: $bg-color;
       color: $text-secondary;
       font-weight: 500;
       padding: 12px 16px;
       text-align: left;
-      border-bottom: 1px solid #f0f0f0;
+      border-bottom: 1px solid $border-color-light;
     }
 
     .col-product { width: auto; }
@@ -448,7 +449,7 @@ onMounted(() => {
   tbody {
     td {
       padding: 16px;
-      border-bottom: 1px solid #f5f5f5;
+      border-bottom: 1px solid $border-color-light;
       vertical-align: middle;
       color: $text-regular;
     }
@@ -467,7 +468,7 @@ onMounted(() => {
         height: 60px;
         object-fit: cover;
         border-radius: $border-radius-base;
-        border: 1px solid #f0f0f0;
+        border: 1px solid $border-color-light;
       }
 
       .product-info {
@@ -499,6 +500,7 @@ onMounted(() => {
   border-radius: $border-radius-small;
   padding: 20px 24px;
   margin-bottom: 16px;
+  border: 1px solid $border-color-light;
 
   .amount-row {
     @include flex-between;
@@ -516,7 +518,7 @@ onMounted(() => {
     &.amount-total {
       margin-top: 8px;
       padding-top: 14px;
-      border-top: 1px dashed #f0f0f0;
+      border-top: 1px dashed $border-color;
 
       .amount-label {
         color: $text-primary;
@@ -538,6 +540,7 @@ onMounted(() => {
   background: #fff;
   border-radius: $border-radius-small;
   padding: 16px 24px;
+  border: 1px solid $border-color-light;
 
   // 右对齐操作按钮组
   flex-direction: row-reverse;

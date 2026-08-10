@@ -45,7 +45,7 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .back-to-top {
   position: fixed;
   right: 40px;
@@ -54,27 +54,27 @@ onUnmounted(() => {
   height: 44px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: $shadow-md;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #606266;
+  color: $text-regular;
   z-index: 999;
-  transition: all 0.3s ease;
-}
+  transition: $transition-base;
 
-.back-to-top:hover {
-  background: #409EFF;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(64, 158, 255, 0.3);
+  &:hover {
+    background: $primary-color;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba($primary-color, 0.3);
+  }
 }
 
 /* 过渡动画 */
 .back-top-fade-enter-active,
 .back-top-fade-leave-active {
-  transition: all 0.3s ease;
+  transition: $transition-base;
 }
 
 .back-top-fade-enter-from,

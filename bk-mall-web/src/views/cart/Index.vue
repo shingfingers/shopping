@@ -255,6 +255,7 @@ onMounted(() => {
   background: #fff;
   border-radius: $border-radius-small;
   padding: 80px 0;
+  border: 1px solid $border-color-light;
 }
 
 // ============= 表格 =============
@@ -262,16 +263,17 @@ onMounted(() => {
   background: #fff;
   border-radius: $border-radius-small $border-radius-small 0 0;
   overflow: hidden;
+  border: 1px solid $border-color-light;
 }
 
 .cart-header {
   display: flex;
   align-items: center;
-  background: #fafafa;
+  background: $bg-color;
   padding: 14px 20px;
   font-size: 13px;
   color: $text-secondary;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid $border-color-light;
 }
 
 .cart-body {
@@ -282,12 +284,9 @@ onMounted(() => {
   display: flex;
   align-items: center;
   padding: 16px 20px;
-  border-bottom: 1px solid #f5f5f5;
-  transition: background 0.2s;
-
-  &:hover {
-    background: #fafafa;
-  }
+  border-bottom: 1px solid $border-color-light;
+  transition: $transition-fast;
+  &:hover { background: $bg-color; }
 }
 
 .col-check { width: 48px; flex-shrink: 0; }
@@ -306,21 +305,17 @@ onMounted(() => {
     width: 80px;
     height: 80px;
     object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid #f0f0f0;
+    border-radius: $border-radius-base;
+    border: 1px solid $border-color-light;
   }
 
-  .product-detail {
-    flex: 1;
-  }
-
+  .product-detail { flex: 1; }
   .product-name {
     font-size: 14px;
     color: $text-primary;
     line-height: 1.4;
     @include text-ellipsis(2);
   }
-
   .product-spec {
     font-size: 12px;
     color: $text-secondary;
@@ -328,16 +323,8 @@ onMounted(() => {
   }
 }
 
-.price {
-  color: $text-primary;
-  font-size: 14px;
-}
-
-.subtotal-price {
-  color: $danger-color;
-  font-size: 15px;
-  font-weight: 600;
-}
+.price { color: $text-primary; font-size: 14px; }
+.subtotal-price { color: $danger-color; font-size: 15px; font-weight: 600; }
 
 // ============= 底部结算 =============
 .cart-footer {
@@ -345,10 +332,12 @@ onMounted(() => {
   background: #fff;
   border-radius: 0 0 $border-radius-small $border-radius-small;
   padding: 16px 20px;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: $shadow-sm;
   position: sticky;
   bottom: 0;
   z-index: 10;
+  border: 1px solid $border-color-light;
+  border-top: none;
 }
 
 .footer-left {
@@ -367,77 +356,28 @@ onMounted(() => {
     color: $text-regular;
     .count { color: $danger-color; font-size: 16px; }
   }
-
-  .total-label {
-    font-size: 13px;
-    color: $text-secondary;
-  }
-
-  .total-price {
-    font-size: 22px;
-    font-weight: 700;
-    color: $danger-color;
-  }
-
-  .el-button {
-    margin-left: 10px;
-    min-width: 120px;
-  }
+  .total-label { font-size: 13px; color: $text-secondary; }
+  .total-price { font-size: 22px; font-weight: 700; color: $danger-color; }
+  .el-button { margin-left: 10px; min-width: 120px; font-weight: 500; }
 }
 
-// ========== 响应式适配 ==========
+// ========== 响应式 ==========
 @include respond-to('tablet') {
-  .section-inner {
-    width: 100%;
-  }
+  .section-inner { width: 100%; }
 }
 
 @include respond-to('mobile') {
-  .section-inner {
-    width: 100%;
-    padding: 0 12px 40px;
+  .section-inner { width: 100%; padding: 0 12px 40px; }
+  .page-title { font-size: 18px; padding: 16px 0 12px; }
+  .cart-table { overflow-x: auto; -webkit-overflow-scrolling: touch;
+    .cart-header, .cart-item { min-width: 640px; }
   }
-
-  .page-title {
-    font-size: 18px;
-    padding: 16px 0 12px;
-  }
-
-  // 表格在移动端改为横向滚动（保留完整表格结构）
-  .cart-table {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-
-    .cart-header,
-    .cart-item {
-      min-width: 640px;
-    }
-  }
-
-  // 底部结算栏改为可换行纵向布局
   .cart-footer {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    padding: 12px;
-
-    .footer-left {
-      justify-content: center;
-    }
-
-    .footer-right {
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-
-      .total-price {
-        font-size: 20px;
-      }
-
-      .el-button {
-        width: 100%;
-        margin-left: 0;
-      }
+    flex-direction: column; align-items: stretch; gap: 12px; padding: 12px;
+    .footer-left { justify-content: center; }
+    .footer-right { flex-wrap: wrap; justify-content: center; gap: 8px;
+      .total-price { font-size: 20px; }
+      .el-button { width: 100%; margin-left: 0; }
     }
   }
 }

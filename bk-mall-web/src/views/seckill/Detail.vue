@@ -258,7 +258,7 @@ onUnmounted(() => {
 }
 
 .section-inner {
-  width: 1200px;
+  width: $layout-width;
   margin: 0 auto;
   padding: 0 20px 40px;
 }
@@ -272,8 +272,9 @@ onUnmounted(() => {
   display: flex;
   gap: 24px;
   background: #fff;
-  border-radius: 8px;
+  border-radius: $border-radius-small;
   padding: 24px;
+  border: 1px solid $border-color-light;
 }
 
 .detail-left {
@@ -284,7 +285,7 @@ onUnmounted(() => {
     width: 440px;
     height: 440px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: $border-radius-small;
   }
 }
 
@@ -295,10 +296,10 @@ onUnmounted(() => {
 
 .seckill-label {
   display: inline-block;
-  background: linear-gradient(135deg, #F56C6C, #e85050);
+  background: linear-gradient(135deg, $danger-color, #e85050);
   color: #fff;
   padding: 3px 12px;
-  border-radius: 4px;
+  border-radius: $border-radius-base;
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 10px;
@@ -315,7 +316,7 @@ onUnmounted(() => {
 // 价格区
 .seckill-price-box {
   background: linear-gradient(135deg, #fef0f0, #fff5f5);
-  border-radius: 8px;
+  border-radius: $border-radius-small;
   padding: 16px;
   margin-bottom: 20px;
 
@@ -406,8 +407,9 @@ onUnmounted(() => {
   width: 220px;
   flex-shrink: 0;
   padding: 16px;
-  background: #fafafa;
-  border-radius: 8px;
+  background: $bg-color;
+  border-radius: $border-radius-small;
+  border: 1px solid $border-color-light;
 
   h4 {
     font-size: 15px;

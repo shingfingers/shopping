@@ -267,7 +267,7 @@ onMounted(() => {
 }
 
 .section-inner {
-  width: 1200px;
+  width: $layout-width;
   margin: 0 auto;
   padding: 0 20px 40px;
 }
@@ -286,9 +286,10 @@ onMounted(() => {
 // ============= 订单卡片 =============
 .order-card {
   background: #fff;
-  border-radius: 8px;
+  border-radius: $border-radius-small;
   margin-bottom: 16px;
   overflow: hidden;
+  border: 1px solid $border-color-light;
 }
 
 .order-header {
@@ -296,8 +297,8 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 14px 20px;
-  background: #fafafa;
-  border-bottom: 1px solid #f0f0f0;
+  background: $bg-color;
+  border-bottom: 1px solid $border-color-light;
 
   .order-info {
     display: flex;
@@ -326,7 +327,7 @@ onMounted(() => {
   align-items: center;
   gap: 12px;
   padding: 12px 0;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid $border-color-light;
 
   &:last-child { border-bottom: none; }
 
@@ -334,8 +335,8 @@ onMounted(() => {
     width: 60px;
     height: 60px;
     object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid #f0f0f0;
+    border-radius: $border-radius-base;
+    border: 1px solid $border-color-light;
   }
 
   .goods-info {
@@ -362,7 +363,7 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 14px 20px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid $border-color-light;
 
   .order-total {
     font-size: 13px;
@@ -384,8 +385,9 @@ onMounted(() => {
 // ============= 空状态 =============
 .empty-orders {
   background: #fff;
-  border-radius: 8px;
+  border-radius: $border-radius-small;
   padding: 80px 0;
+  border: 1px solid $border-color-light;
 }
 
 .pagination-bar {

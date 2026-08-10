@@ -128,13 +128,13 @@ function goToDetail() {
   border-radius: $border-radius-small;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border: 1px solid transparent;
+  transition: $transition-base;
+  border: 1px solid $border-color-light;
 
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     box-shadow: $shadow-hover;
-    border-color: rgba($primary-color, 0.2);
+    border-color: transparent;
   }
 }
 
@@ -143,7 +143,7 @@ function goToDetail() {
   width: 100%;
   padding-top: 100%;
   overflow: hidden;
-  background: #f8f8f8;
+  background: $bg-color;
 
   img {
     position: absolute;
@@ -152,11 +152,11 @@ function goToDetail() {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    transition: transform 0.4s ease;
-    padding: 8px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 12px;
 
     .product-card:hover & {
-      transform: scale(1.05);
+      transform: scale(1.06);
     }
   }
 }
@@ -170,44 +170,45 @@ function goToDetail() {
 
   .tag {
     padding: 2px 8px;
-    border-radius: 4px;
+    border-radius: $border-radius-base;
     font-size: 11px;
     color: #fff;
     font-weight: 500;
+    letter-spacing: 0.5px;
 
-    &.hot { background: linear-gradient(135deg, $danger-color, #e85050); }
-    &.new { background: linear-gradient(135deg, $success-color, #5aaf30); }
-    &.seckill { background: linear-gradient(135deg, $warning-color, #d49230); }
-    &.sale { background: linear-gradient(135deg, $primary-color, #3888e0); }
+    &.hot { background: $danger-color; }
+    &.new { background: $success-color; }
+    &.seckill { background: $warning-color; }
+    &.sale { background: $primary-color; }
   }
 }
 
 .product-card__info {
-  padding: 12px 14px 10px;
+  padding: 14px 14px 12px;
 }
 
 .product-name {
   font-size: 14px;
   font-weight: 400;
   color: $text-primary;
-  line-height: 1.4;
+  line-height: 1.5;
   @include text-ellipsis(2);
-  min-height: 38px;
-  margin-bottom: 8px;
+  min-height: 40px;
+  margin-bottom: 10px;
 }
 
 .product-price {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 
   .current-price {
     color: $danger-color;
     font-size: 18px;
     font-weight: 700;
-
-    em { font-size: 12px; font-style: normal; }
+    line-height: 1;
+    em { font-size: 12px; font-style: normal; margin-right: 1px; }
   }
 
   .original-price {
@@ -225,13 +226,14 @@ function goToDetail() {
   .brand-tag {
     font-weight: 500;
     font-size: 11px;
+    background: $bg-color;
+    padding: 1px 6px;
+    border-radius: 3px;
   }
 }
 
-// 秒杀进度条
 .seckill-progress {
-  padding: 0 14px 10px;
-
+  padding: 0 14px 12px;
   .progress-text {
     font-size: 11px;
     color: $text-secondary;

@@ -61,7 +61,7 @@ defineProps({
 <style scoped lang="scss">
 .skeleton-line {
   height: 14px;
-  background: #f0f0f0;
+  background: $bg-color-grey;
   border-radius: 4px;
 }
 
@@ -71,12 +71,13 @@ defineProps({
   background: #fff;
   border-radius: $border-radius-small;
   overflow: hidden;
+  border: 1px solid $border-color-light;
 }
 
 .skeleton-image {
   width: 100%;
   padding-top: 100%;
-  background: #f0f0f0;
+  background: $bg-color-grey;
 }
 
 .skeleton-body {
@@ -93,20 +94,20 @@ defineProps({
   gap: 12px;
   padding: 16px 20px;
   background: #fff;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid $border-color-light;
 
   .skeleton-check {
     width: 16px;
     height: 16px;
     border-radius: 4px;
-    background: #f0f0f0;
+    background: $bg-color-grey;
   }
 
   .skeleton-thumb {
     width: 60px;
     height: 60px;
     border-radius: 6px;
-    background: #f0f0f0;
+    background: $bg-color-grey;
   }
 
   .skeleton-info {

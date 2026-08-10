@@ -570,7 +570,7 @@ onMounted(async () => {
 }
 
 .section-inner {
-  width: 1200px;
+  width: $layout-width;
   margin: 0 auto;
   padding: 0 20px 40px;
 }
@@ -595,14 +595,15 @@ onMounted(async () => {
 // ============= 通用区块 =============
 .block {
   background: #fff;
-  border-radius: 8px;
+  border-radius: $border-radius-small;
   margin-bottom: 16px;
   overflow: hidden;
+  border: 1px solid $border-color-light;
 }
 
 .block-header {
   padding: 16px 20px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid $border-color-light;
 
   h3 {
     font-size: 16px;
@@ -623,8 +624,8 @@ onMounted(async () => {
 }
 
 .address-card {
-  border: 2px solid #f0f0f0;
-  border-radius: 8px;
+  border: 2px solid $border-color-light;
+  border-radius: $border-radius-small;
   padding: 14px;
   cursor: pointer;
   position: relative;
@@ -671,7 +672,7 @@ onMounted(async () => {
   align-items: center;
   gap: 12px;
   padding: 14px 0;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid $border-color-light;
 
   &:last-child { border-bottom: none; }
 
@@ -679,8 +680,8 @@ onMounted(async () => {
     width: 60px;
     height: 60px;
     object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid #f0f0f0;
+    border-radius: $border-radius-base;
+    border: 1px solid $border-color-light;
   }
 
   .goods-info {
@@ -715,8 +716,8 @@ onMounted(async () => {
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
-  border: 2px solid #f0f0f0;
-  border-radius: 8px;
+  border: 2px solid $border-color-light;
+  border-radius: $border-radius-small;
   cursor: pointer;
   transition: all 0.2s;
   font-size: 14px;
@@ -739,10 +740,11 @@ onMounted(async () => {
 
 .summary-card {
   background: #fff;
-  border-radius: 8px;
+  border-radius: $border-radius-small;
   padding: 24px;
   position: sticky;
   top: 168px;
+  border: 1px solid $border-color-light;
 
   h4 {
     font-size: 16px;
@@ -750,7 +752,7 @@ onMounted(async () => {
     color: $text-primary;
     margin-bottom: 20px;
     padding-bottom: 12px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid $border-color-light;
   }
 }
 
@@ -773,7 +775,7 @@ onMounted(async () => {
   justify-content: space-between;
   align-items: baseline;
   padding-top: 12px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid $border-color-light;
   margin-top: 12px;
   margin-bottom: 20px;
 

@@ -453,7 +453,7 @@ onMounted(() => {
 }
 
 .section-inner {
-  width: 1200px;
+  width: $layout-width;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -461,7 +461,7 @@ onMounted(() => {
 .breadcrumb-bar {
   background: #fff;
   padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid $border-color-light;
 
   .section-inner {
     padding: 0 20px;
@@ -470,7 +470,7 @@ onMounted(() => {
 
 .content-layout {
   display: flex;
-  gap: 16px;
+  gap: 20px;
   padding: 20px 0;
 }
 
@@ -479,21 +479,24 @@ onMounted(() => {
   width: 220px;
   flex-shrink: 0;
   background: #fff;
-  border-radius: 8px;
-  padding: 16px;
+  border-radius: $border-radius-small;
+  padding: 18px;
   height: fit-content;
   position: sticky;
   top: 168px;
+  border: 1px solid $border-color-light;
 }
 
 .filter-group {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 
   .filter-title {
     font-size: 14px;
     font-weight: 600;
     color: $text-primary;
     margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $border-color-light;
   }
 }
 
@@ -504,14 +507,14 @@ onMounted(() => {
     align-items: center;
     padding: 7px 10px;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: $border-radius-base;
     font-size: 13px;
     color: $text-regular;
-    transition: all 0.2s;
+    transition: $transition-fast;
 
     &:hover { background: $bg-color; }
     &.active {
-      background: rgba($primary-color, 0.08);
+      background: $primary-bg;
       color: $primary-color;
       font-weight: 500;
     }
@@ -521,15 +524,15 @@ onMounted(() => {
 .price-option {
   padding: 5px 10px;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: $border-radius-base;
   font-size: 12px;
   color: $text-regular;
-  transition: all 0.2s;
+  transition: $transition-fast;
   margin-bottom: 2px;
 
   &:hover { background: $bg-color; }
   &.active {
-    background: rgba($primary-color, 0.08);
+    background: $primary-bg;
     color: $primary-color;
   }
 }
@@ -542,14 +545,14 @@ onMounted(() => {
   .brand-option {
     padding: 5px 10px;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: $border-radius-base;
     font-size: 12px;
     color: $text-regular;
-    transition: all 0.2s;
+    transition: $transition-fast;
 
     &:hover { background: $bg-color; }
     &.active {
-      background: rgba($primary-color, 0.08);
+      background: $primary-bg;
       color: $primary-color;
     }
   }
@@ -570,10 +573,11 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   background: #fff;
-  border-radius: 8px;
+  border-radius: $border-radius-small;
   padding: 0 16px;
   height: 48px;
   margin-bottom: 16px;
+  border: 1px solid $border-color-light;
 
   .sort-options {
     display: flex;
@@ -583,20 +587,17 @@ onMounted(() => {
   .sort-item {
     padding: 6px 14px;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: $border-radius-base;
     font-size: 13px;
     color: $text-regular;
-    transition: all 0.2s;
+    transition: $transition-fast;
     display: flex;
     align-items: center;
     gap: 2px;
 
-    &:hover {
-      background: $bg-color;
-    }
-
+    &:hover { background: $bg-color; }
     &.active {
-      background: rgba($primary-color, 0.08);
+      background: $primary-bg;
       color: $primary-color;
       font-weight: 500;
     }
@@ -605,7 +606,6 @@ onMounted(() => {
   .total-count {
     font-size: 12px;
     color: $text-secondary;
-
     b { color: $primary-color; }
   }
 }
@@ -624,82 +624,32 @@ onMounted(() => {
   padding-bottom: 20px;
 }
 
-// 移动端筛选按钮（默认隐藏）
 .filter-toggle {
   display: none;
   margin-left: auto;
 }
 
-// ========== 响应式适配 ==========
+// ========== 响应式 ==========
 @include respond-to('tablet') {
-  .section-inner {
-    width: 100%;
-  }
-
-  // 平板：商品网格改为 3 列
-  .product-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  .section-inner { width: 100%; }
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 @include respond-to('mobile') {
-  .section-inner {
-    width: 100%;
-    padding: 0 12px;
-  }
-
-  // 隐藏桌面端左侧筛选（改由抽屉承担）
-  .filter-sidebar {
-    display: none;
-  }
-
-  // 显示移动端筛选按钮
-  .filter-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  // 内容区改为纵向
-  .content-layout {
-    flex-direction: column;
-    gap: 12px;
-    padding: 12px 0;
-  }
-
-  // 排序栏自适应换行
+  .section-inner { width: 100%; padding: 0 12px; }
+  .filter-sidebar { display: none; }
+  .filter-toggle { display: inline-flex; align-items: center; gap: 4px; }
+  .content-layout { flex-direction: column; gap: 12px; padding: 12px 0; }
   .sort-bar {
     flex-wrap: wrap;
     height: auto;
     padding: 10px 12px;
     gap: 8px;
-
-    .sort-options {
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-
-    .sort-item {
-      padding: 5px 10px;
-      font-size: 12px;
-    }
-
-    .total-count {
-      font-size: 11px;
-    }
+    .sort-options { flex-wrap: wrap; gap: 4px; }
+    .sort-item { padding: 5px 10px; font-size: 12px; }
+    .total-count { font-size: 11px; }
   }
-
-  // 商品网格改为 2 列
-  .product-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    min-height: 200px;
-  }
-
-  // 分页栏紧凑
-  .pagination-bar {
-    margin-top: 20px;
-    padding-bottom: 16px;
-  }
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; min-height: 200px; }
+  .pagination-bar { margin-top: 20px; padding-bottom: 16px; }
 }
 </style>

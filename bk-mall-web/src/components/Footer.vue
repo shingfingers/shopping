@@ -143,13 +143,13 @@ const qrCodeImage = generateQrCode()
 
 <style scoped lang="scss">
 .app-footer {
-  background: #1a1a2e;
-  color: #ccc;
+  background: #1e1e2e;
+  color: #b0b0c0;
   margin-top: 40px;
 }
 
 .footer-inner {
-  width: 1200px;
+  width: $layout-width;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -157,7 +157,7 @@ const qrCodeImage = generateQrCode()
 // 服务保障
 .footer-service {
   background: #fff;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid $border-color-light;
 
   .footer-inner {
     display: flex;
@@ -189,7 +189,7 @@ const qrCodeImage = generateQrCode()
 // 帮助中心链接
 .footer-links {
   padding: 40px 0 30px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 
   .footer-inner {
     display: flex;
@@ -199,7 +199,7 @@ const qrCodeImage = generateQrCode()
   .link-column {
     h4 {
       font-size: 15px;
-      color: #fff;
+      color: #e0e0e8;
       margin-bottom: 14px;
       font-weight: 500;
     }
@@ -211,13 +211,13 @@ const qrCodeImage = generateQrCode()
         margin-bottom: 8px;
 
         a {
-          color: #999;
+          color: #8888a0;
           text-decoration: none;
           font-size: 13px;
           transition: color 0.2s;
 
           &:hover {
-            color: $primary-color;
+            color: $primary-light;
           }
         }
       }
@@ -233,14 +233,14 @@ const qrCodeImage = generateQrCode()
 
       .phone {
         font-size: 22px;
-        color: $primary-color;
+        color: $primary-light;
         font-weight: 700;
         margin-bottom: 6px;
       }
 
       p {
         font-size: 12px;
-        color: #999;
+        color: #8888a0;
         margin-bottom: 2px;
       }
     }
@@ -269,7 +269,7 @@ const qrCodeImage = generateQrCode()
 
       span {
         font-size: 11px;
-        color: #999;
+        color: #8888a0;
       }
     }
   }
@@ -282,7 +282,7 @@ const qrCodeImage = generateQrCode()
 
   p {
     font-size: 12px;
-    color: #777;
+    color: #6a6a80;
     margin-bottom: 4px;
   }
 }

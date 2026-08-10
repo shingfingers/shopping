@@ -437,11 +437,12 @@ onMounted(loadProduct)
 
 .product-info-section {
   display: flex;
-  gap: 24px;
+  gap: 28px;
   background: #fff;
   border-radius: $border-radius-small;
-  padding: 24px;
+  padding: 28px;
   margin-bottom: 20px;
+  border: 1px solid $border-color-light;
 }
 
 .product-gallery {
@@ -451,11 +452,11 @@ onMounted(loadProduct)
   .main-image {
     width: 420px;
     height: 420px;
-    border: 1px solid #f0f0f0;
+    border: 1px solid $border-color-light;
     border-radius: $border-radius-small;
     overflow: hidden;
     @include flex-center;
-    background: #fafafa;
+    background: $bg-color;
 
     img {
       max-width: 90%;
@@ -476,8 +477,8 @@ onMounted(loadProduct)
       border-radius: $border-radius-base;
       overflow: hidden;
       cursor: pointer;
-      transition: border-color 0.2s;
-      background: #f5f5f5;
+      transition: $transition-fast;
+      background: $bg-color;
 
       &.active { border-color: $primary-color; }
 
@@ -507,14 +508,15 @@ onMounted(loadProduct)
 .product-subtitle {
   font-size: 13px;
   color: $danger-color;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .price-box {
-  background: linear-gradient(135deg, #fef0f0, #fff5f5);
+  background: linear-gradient(135deg, #fef2f2, #fff);
   border-radius: $border-radius-small;
-  padding: 16px;
-  margin-bottom: 16px;
+  padding: 18px;
+  margin-bottom: 18px;
+  border: 1px solid #fecaca;
 
   .price-row {
     display: flex;
@@ -530,6 +532,7 @@ onMounted(loadProduct)
     font-size: 28px;
     font-weight: 700;
     color: $danger-color;
+    line-height: 1;
     em { font-size: 16px; font-style: normal; }
   }
 
@@ -548,7 +551,7 @@ onMounted(loadProduct)
 }
 
 .info-rows {
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 
   .info-row {
     display: flex;
@@ -558,14 +561,14 @@ onMounted(loadProduct)
 
     .label { color: $text-secondary; width: 42px; flex-shrink: 0; }
     .tags { display: flex; gap: 6px; flex-wrap: wrap; }
-    .brand-tag { font-weight: 600; }
+    .brand-tag { font-weight: 600; font-size: 13px; }
   }
 
   .low-stock { color: $warning-color; font-weight: 500; }
 }
 
 .sku-section {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 
   .sku-group {
     display: flex;
@@ -585,18 +588,17 @@ onMounted(loadProduct)
   }
 
   .sku-option {
-    padding: 4px 14px;
+    padding: 5px 14px;
     border: 1px solid $border-color;
     border-radius: $border-radius-base;
     cursor: pointer;
     font-size: 13px;
-    transition: all 0.2s;
+    transition: $transition-fast;
 
     &:hover { border-color: $primary-color; }
-
     &.active {
       border-color: $primary-color;
-      background: rgba($primary-color, 0.06);
+      background: $primary-bg;
       color: $primary-color;
       font-weight: 500;
     }
@@ -618,7 +620,7 @@ onMounted(loadProduct)
   .action-buttons {
     display: flex;
     gap: 12px;
-    .el-button { min-width: 140px; height: 44px; font-size: 16px; }
+    .el-button { min-width: 140px; height: 44px; font-size: 16px; font-weight: 500; }
   }
 }
 
@@ -626,6 +628,7 @@ onMounted(loadProduct)
   background: #fff;
   border-radius: $border-radius-small;
   overflow: hidden;
+  border: 1px solid $border-color-light;
 
   :deep(.el-tabs__content) { padding: 0; }
   .tab-content { padding: 24px; min-height: 300px; }
@@ -636,7 +639,6 @@ onMounted(loadProduct)
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-bottom: 24px;
-
   .intro-item {
     display: flex;
     font-size: 13px;
@@ -658,9 +660,8 @@ onMounted(loadProduct)
   align-items: center;
   gap: 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid $border-color-light;
   margin-bottom: 20px;
-
   .review-score { text-align: center;
     .score-num { font-size: 36px; font-weight: 700; color: $danger-color; display: block; }
   }
@@ -669,8 +670,7 @@ onMounted(loadProduct)
 
 .review-item {
   padding: 16px 0;
-  border-bottom: 1px solid #f5f5f5;
-
+  border-bottom: 1px solid $border-color-light;
   .review-header {
     display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
     .review-user { font-size: 13px; color: $text-primary; margin-bottom: 2px; }
@@ -679,101 +679,33 @@ onMounted(loadProduct)
   .review-content { font-size: 13px; color: $text-regular; line-height: 1.6; }
 }
 
-// ========== 响应式适配 ==========
+// ========== 响应式 ==========
 @include respond-to('tablet') {
-  // 平板：图片区收窄
   .product-gallery {
-    width: 360px;
-
-    .main-image {
-      width: 360px;
-      height: 360px;
-    }
+    width: 340px;
+    .main-image { width: 340px; height: 340px; }
   }
-
-  // 商品属性平铺为单列以避免溢出
-  .intro-grid {
-    grid-template-columns: 1fr;
-  }
+  .intro-grid { grid-template-columns: 1fr; }
 }
 
 @include respond-to('mobile') {
-  .breadcrumb {
-    padding: 12px 0;
-  }
-
-  // 商品信息区改为纵向布局
-  .product-info-section {
-    flex-direction: column;
-    gap: 16px;
-    padding: 16px;
-  }
-
-  // 图片宽度改为 100%
+  .breadcrumb { padding: 12px 0; }
+  .product-info-section { flex-direction: column; gap: 16px; padding: 16px; }
   .product-gallery {
     width: 100%;
-
-    .main-image {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 1 / 1;
-      max-width: 420px;
-      margin: 0 auto;
-    }
-
-    .thumbnail-list {
-      justify-content: flex-start;
-    }
+    .main-image { width: 100%; height: auto; aspect-ratio: 1/1; max-width: 420px; margin: 0 auto; }
+    .thumbnail-list { justify-content: flex-start; }
   }
-
-  .product-title {
-    font-size: 17px;
-  }
-
-  .price-box {
-    padding: 12px;
-
-    .current-price {
-      font-size: 24px;
-    }
-  }
-
-  // 操作区改为纵向
+  .product-title { font-size: 17px; }
+  .price-box { padding: 12px; .current-price { font-size: 24px; } }
   .action-section {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
-
-    .action-buttons {
-      display: flex;
-      gap: 10px;
-
-      .el-button {
-        flex: 1;
-        min-width: 0;
-        height: 42px;
-        font-size: 15px;
-      }
+    flex-direction: column; align-items: stretch; gap: 14px;
+    .action-buttons { display: flex; gap: 10px;
+      .el-button { flex: 1; min-width: 0; height: 42px; font-size: 15px; }
     }
   }
-
-  // 商品属性单列
-  .intro-grid {
-    grid-template-columns: 1fr;
-  }
-
-  // 详情 Tab 内容内边距收紧
-  .product-detail-section {
-    .tab-content {
-      padding: 14px;
-    }
-  }
-
-  // 评价汇总改为纵向
-  .review-summary {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
+  .intro-grid { grid-template-columns: 1fr; }
+  .product-detail-section .tab-content { padding: 14px; }
+  .review-summary { flex-direction: column; align-items: flex-start; gap: 12px; }
 }
 </style>

@@ -195,7 +195,7 @@ onUnmounted(() => {
 }
 
 .section-inner {
-  width: 1200px;
+  width: $layout-width;
   margin: 0 auto;
   padding: 0 20px 40px;
 }
@@ -312,16 +312,16 @@ onUnmounted(() => {
 
 .seckill-product-card {
   background: #fff;
-  border-radius: 8px;
+  border-radius: $border-radius-small;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
-  border: 1px solid transparent;
+  border: 1px solid $border-color-light;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    border-color: rgba(#F56C6C, 0.3);
+    box-shadow: $shadow-hover;
+    border-color: rgba($danger-color, 0.3);
   }
 
   .card-image {
@@ -329,7 +329,7 @@ onUnmounted(() => {
     width: 100%;
     padding-top: 100%;
     overflow: hidden;
-    background: #f8f8f8;
+    background: $bg-color;
 
     img {
       position: absolute;
@@ -350,11 +350,11 @@ onUnmounted(() => {
       top: 8px;
       left: 8px;
       padding: 2px 10px;
-      background: linear-gradient(135deg, #F56C6C, #e85050);
+      background: linear-gradient(135deg, $danger-color, #e85050);
       color: #fff;
       font-size: 12px;
       font-weight: 600;
-      border-radius: 4px;
+      border-radius: $border-radius-base;
     }
   }
 

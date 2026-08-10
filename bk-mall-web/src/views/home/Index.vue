@@ -216,20 +216,20 @@ import { generatePlaceholder, getCategoryIcon } from '@/utils/placeholders'
 
 // 生成本地 Banner 占位图（替代外部 picsum.photos 依赖）
 function generateBannerImage(title, subtitle, color1, color2) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="360" viewBox="0 0 800 360">
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="445" viewBox="0 0 800 445" preserveAspectRatio="xMidYMid slice">
     <defs>
       <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" style="stop-color:${color1}"/>
         <stop offset="100%" style="stop-color:${color2}"/>
       </linearGradient>
     </defs>
-    <rect fill="url(#bg)" width="800" height="360"/>
-    <circle cx="650" cy="80" r="120" fill="rgba(255,255,255,0.08)"/>
-    <circle cx="720" cy="280" r="80" fill="rgba(255,255,255,0.06)"/>
-    <text x="60" y="180" font-size="42" font-weight="700" fill="#fff" font-family="PingFang SC, Microsoft YaHei">${title}</text>
-    <text x="60" y="230" font-size="22" fill="rgba(255,255,255,0.85)" font-family="PingFang SC, Microsoft YaHei">${subtitle}</text>
+    <rect fill="url(#bg)" width="800" height="445"/>
+    <circle cx="640" cy="110" r="130" fill="rgba(255,255,255,0.08)"/>
+    <circle cx="720" cy="355" r="95" fill="rgba(255,255,255,0.06)"/>
+    <text x="60" y="215" font-size="44" font-weight="700" fill="#fff" font-family="PingFang SC, Microsoft YaHei">${title}</text>
+    <text x="60" y="270" font-size="24" fill="rgba(255,255,255,0.85)" font-family="PingFang SC, Microsoft YaHei">${subtitle}</text>
   </svg>`
-  return `data:image/svg+xml,${encodeURIComponent(svg)}`
+  return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`
 }
 
 const router = useRouter()
@@ -499,49 +499,50 @@ onUnmounted(() => {
 // ==================== 主视觉区 ====================
 .hero-section {
   background: #fff;
-  padding: 16px 0;
+  padding: 20px 0;
 
   .hero-inner {
     width: $layout-width;
     margin: 0 auto;
     padding: 0 20px;
     display: flex;
-    gap: 16px;
+    gap: 20px;
     height: 400px;
   }
 }
 
 // 分类菜单
 .category-menu {
-  width: 220px;
-  background: $bg-color-dark;
+  width: 200px;
+  background: $bg-color;
   border-radius: $border-radius-small;
   overflow: visible;
   flex-shrink: 0;
-  padding: 8px 0;
+  padding: 6px 0;
+  border: 1px solid $border-color-light;
 }
 
 .category-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 16px;
-  color: #ccc;
+  padding: 10px 14px;
+  color: $text-regular;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: $transition-fast;
   position: relative;
   font-size: 13px;
   gap: 8px;
 
   &:hover,
   &.active {
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
+    background: #fff;
+    color: $primary-color;
   }
 
   .cat-icon {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     flex-shrink: 0;
     border-radius: 50%;
   }
@@ -555,6 +556,7 @@ onUnmounted(() => {
 
   .el-icon {
     font-size: 11px;
+    color: $text-secondary;
   }
 }
 
@@ -563,7 +565,7 @@ onUnmounted(() => {
   position: absolute;
   left: 100%;
   top: 0;
-  width: 480px;
+  width: 460px;
   min-height: 100%;
   background: #fff;
   border-radius: 0 $border-radius-small $border-radius-small $border-radius-small;
@@ -573,6 +575,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  border: 1px solid $border-color-light;
 }
 
 .sub-cat-group {
@@ -583,16 +586,16 @@ onUnmounted(() => {
 
 .sub-cat-item {
   padding: 6px 14px;
-  background: #f5f5f5;
+  background: $bg-color;
   border-radius: $border-radius-base;
   font-size: 12px;
   color: $text-regular;
   text-decoration: none;
-  transition: all 0.2s;
+  transition: $transition-fast;
   white-space: nowrap;
 
   &:hover {
-    background: rgba($primary-color, 0.1);
+    background: $primary-bg;
     color: $primary-color;
   }
 }
@@ -615,20 +618,20 @@ onUnmounted(() => {
 }
 
 .sidebar-card {
-  background: #fafafa;
+  background: $bg-color;
   border-radius: $border-radius-small;
-  padding: 16px;
-  border: 1px solid #f0f0f0;
+  padding: 20px 16px;
+  border: 1px solid $border-color-light;
 }
 
 .sidebar-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 
   .user-greeting {
-    p { font-size: 13px; color: $text-regular; }
+    p { font-size: 13px; color: $text-regular; margin-bottom: 2px; }
     .vip-badge {
       font-size: 11px;
       color: $warning-color;
@@ -639,11 +642,12 @@ onUnmounted(() => {
     .login-links {
       display: flex;
       gap: 8px;
-      margin-top: 3px;
+      margin-top: 2px;
       a {
         font-size: 12px;
         color: $primary-color;
         text-decoration: none;
+        font-weight: 500;
       }
     }
   }
@@ -652,22 +656,23 @@ onUnmounted(() => {
 .sidebar-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 8px;
 
   .action-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    padding: 8px 4px;
+    padding: 10px 4px;
     cursor: pointer;
-    border-radius: 6px;
-    transition: all 0.2s;
+    border-radius: $border-radius-base;
+    transition: $transition-fast;
     font-size: 12px;
     color: $text-regular;
+    background: #fff;
 
     &:hover {
-      background: rgba($primary-color, 0.06);
+      background: $primary-bg;
       color: $primary-color;
     }
   }
@@ -680,7 +685,7 @@ onUnmounted(() => {
   padding: 10px 12px;
   background: #fff;
   border-radius: $border-radius-small;
-  border: 1px solid #f0f0f0;
+  border: 1px solid $border-color-light;
   font-size: 12px;
 
   .el-icon { color: $warning-color; flex-shrink: 0; margin-top: 1px; }
@@ -692,10 +697,13 @@ onUnmounted(() => {
 .quick-entries {
   background: #fff;
   padding: 20px 0;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid $border-color-light;
   margin-top: 12px;
 
   .section-inner {
+    width: $layout-width;
+    margin: 0 auto;
+    padding: 0 20px;
     display: flex;
     justify-content: space-around;
   }
@@ -706,7 +714,7 @@ onUnmounted(() => {
     align-items: center;
     gap: 8px;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: $transition-fast;
 
     &:hover {
       transform: translateY(-2px);
@@ -717,9 +725,10 @@ onUnmounted(() => {
       height: 56px;
       border-radius: 14px;
       @include flex-center;
+      transition: $transition-fast;
 
       &:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       }
     }
 
@@ -733,9 +742,9 @@ onUnmounted(() => {
 // ==================== 公共区域头部 ====================
 .section-header {
   @include flex-between;
-  margin-bottom: 18px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid $border-color-light;
 
   .header-left {
     display: flex;
@@ -744,7 +753,7 @@ onUnmounted(() => {
   }
 
   .section-title {
-    font-size: 21px;
+    font-size: 20px;
     font-weight: 700;
     color: $text-primary;
     display: flex;
@@ -759,7 +768,7 @@ onUnmounted(() => {
     font-size: 13px;
     color: $text-secondary;
     text-decoration: none;
-    transition: color 0.2s;
+    transition: $transition-fast;
 
     &:hover {
       color: $primary-color;
@@ -773,6 +782,12 @@ onUnmounted(() => {
   margin-top: 12px;
   padding: 28px 0;
 
+  .section-inner {
+    width: $layout-width;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
   .countdown {
     display: flex;
     align-items: center;
@@ -785,7 +800,7 @@ onUnmounted(() => {
     }
 
     .countdown-item {
-      background: #333;
+      background: $text-primary;
       color: #fff;
       padding: 2px 6px;
       border-radius: 4px;
@@ -813,6 +828,12 @@ onUnmounted(() => {
   margin-top: 12px;
   padding: 28px 0;
 
+  .section-inner {
+    width: $layout-width;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
   .section-header {
     .recommend-tabs {
       :deep(.el-tabs__header) {
@@ -833,7 +854,7 @@ onUnmounted(() => {
 
   .load-more {
     text-align: center;
-    margin-top: 24px;
+    margin-top: 28px;
   }
 }
 
@@ -843,6 +864,12 @@ onUnmounted(() => {
   margin-top: 12px;
   padding: 28px 0;
 
+  .section-inner {
+    width: $layout-width;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
   .brand-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -850,28 +877,41 @@ onUnmounted(() => {
   }
 
   .brand-card {
-    border: 1px solid #f0f0f0;
+    border: 1px solid $border-color-light;
     border-radius: $border-radius-small;
     @include flex-center;
     flex-direction: column;
     gap: 10px;
     padding: 24px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: $transition-base;
 
     &:hover {
-      border-color: $primary-color;
-      box-shadow: 0 2px 8px rgba(64, 158, 255, 0.1);
+      border-color: $primary-light;
+      box-shadow: $shadow-md;
+      transform: translateY(-1px);
     }
 
     .brand-logo {
-      width: 56px;
-      height: 56px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       @include flex-center;
       color: #fff;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 700;
+    }
+
+    .brand-logo-placeholder {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      @include flex-center;
+      background: $bg-color;
+      color: $text-secondary;
+      font-size: 14px;
+      font-weight: 600;
+      border: 2px solid $border-color-light;
     }
 
     .brand-name {
@@ -882,7 +922,7 @@ onUnmounted(() => {
   }
 }
 
-// ==================== 通用状态 ====================
+// ==================== 通用 ====================
 .empty-data {
   grid-column: 1 / -1;
   text-align: center;
@@ -893,45 +933,30 @@ onUnmounted(() => {
   grid-column: 1 / -1;
 }
 
-// 子分类弹出动画
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;
 }
-
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
 
-// ========== 响应式适配 ==========
+// ========== 响应式 ==========
 @include respond-to('tablet') {
-  // hero 区域固定宽度容器铺满
-  .hero-section .hero-inner {
-    width: 100%;
-  }
-
-  // 平板：右侧侧边栏收窄
-  .hero-sidebar {
-    width: 180px;
-  }
-
-  // 平板：分类菜单收窄
-  .category-menu {
-    width: 180px;
-  }
-
-  // 品牌专区平板改为 4 列
-  .brand-section .brand-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
+  .hero-section .hero-inner { width: 100%; }
+  .hero-sidebar { width: 170px; }
+  .category-menu { width: 170px; }
+  .brand-section .brand-grid { grid-template-columns: repeat(4, 1fr); }
+  .quick-entries .section-inner,
+  .seckill-section .section-inner,
+  .recommend-section .section-inner,
+  .brand-section .section-inner { width: 100%; }
 }
 
 @include respond-to('mobile') {
-  // hero 区域改为纵向布局
   .hero-section {
     padding: 10px 0;
-
     .hero-inner {
       width: 100%;
       flex-direction: column;
@@ -941,82 +966,43 @@ onUnmounted(() => {
     }
   }
 
-  // 移动端隐藏左侧分类菜单（由 Header 抽屉承担分类入口）
-  .category-menu {
-    display: none;
-  }
+  .category-menu { display: none; }
+  .hero-banner { width: 100%; min-height: 160px; }
+  .hero-sidebar { display: none; }
 
-  // Banner 全宽
-  .hero-banner {
-    width: 100%;
-    min-height: 160px;
-  }
-
-  // 移动端隐藏右侧用户卡片 / 公告
-  .hero-sidebar {
-    display: none;
-  }
-
-  // 快捷入口图标改为 4 列
   .quick-entries {
     .section-inner {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
+      padding: 0 12px;
     }
-
     .quick-entry {
-      .entry-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-      }
-
-      span {
-        font-size: 11px;
-      }
+      .entry-icon { width: 48px; height: 48px; border-radius: 12px; }
+      span { font-size: 11px; }
     }
   }
 
-  // 秒杀商品网格移动端改为 2 列
-  .seckill-section .seckill-products {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
+  .seckill-section .seckill-products { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .recommend-section .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; min-height: 200px; }
+  .brand-section .brand-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
 
-  // 推荐商品网格改为 2 列
-  .recommend-section .product-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    min-height: 200px;
-  }
-
-  // 品牌专区改为 3 列
-  .brand-section .brand-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-  }
-
-  // 区块标题缩小
   .section-header {
     margin-bottom: 12px;
     padding-bottom: 8px;
-
-    .section-title {
-      font-size: 17px;
-    }
-
-    .header-left {
-      gap: 10px;
-    }
+    .section-title { font-size: 17px; }
+    .header-left { gap: 10px; }
   }
 
-  // 各区块内边距收紧
   .seckill-section,
   .recommend-section,
   .brand-section {
     padding: 18px 0;
     margin-top: 8px;
   }
+
+  .seckill-section .section-inner,
+  .recommend-section .section-inner,
+  .brand-section .section-inner { width: 100%; padding: 0 12px; }
 }
 </style>
