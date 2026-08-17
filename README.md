@@ -181,6 +181,8 @@ npm run dev
 ### 界面展示
 登录注册界面：
 <img width="1890" height="913" alt="94ef719193f3f528a9ac37b6ced5f418" src="https://github.com/user-attachments/assets/75ea81b8-c365-41b0-aef9-c8ae9026a7ae" />
+<img width="1911" height="914" alt="64e261248aeaed7096164a43182bc632" src="https://github.com/user-attachments/assets/e89100a2-ec6b-4859-ba8d-24148574eb4f" />
+
 
 
 ---
