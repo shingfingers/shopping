@@ -2,6 +2,7 @@ package com.bk.user_customer_api.controller;
 
 import com.bk.common.pojo.ShoppingUser;
 import com.bk.common.result.BaseResult;
+import com.bk.common.result.BusException;
 import com.bk.common.service.MailService;
 import com.bk.common.service.ShoppingUserService;
 import com.bk.common.util.RandomUtil;
@@ -30,23 +31,30 @@ public class UserController {
      */
     @GetMapping("/sendEmailCode")
     public BaseResult sendEmailCode(@RequestParam("email") String email){
-        // 0.限流：同一邮箱 60 秒内只能发送一次
-        String limitKey = "sendCodeLimit:" + email;
-        if (Boolean.TRUE.equals(stringRedisTemplate.hasKey(limitKey))) {
-            return new BaseResult(429, "验证码发送过于频繁，请1分钟后再试", null);
-        }
-        stringRedisTemplate.opsForValue().set(limitKey, "1", 60, TimeUnit.SECONDS);
-        // 1.生成随机四位数验证码
-        String checkCode = RandomUtil.buildCheckCode(4);
-        // 2.发送邮件
-        String text = "<h3>BK商城注册验证码</h3><p>您的注册验证码为：<strong style='color:red;font-size:20px'>" + checkCode + "</strong></p><p>验证码5分钟内有效，请勿泄露给他人。</p>";
-        BaseResult result = mailService.sendMail(email, text, "BK商城注册验证码");
-        // 3.发送成功，将验证码保存到redis中，发送失败，返回发送结果
-        if (200 == result.getCode()){
-            shoppingUserService.saveRegisterCheckCode(email,checkCode);
-            return BaseResult.ok();
-        }else {
-            return result;
+        try {
+            // 0.限流：同一邮箱 60 秒内只能发送一次
+            String limitKey = "sendCodeLimit:" + email;
+            if (Boolean.TRUE.equals(stringRedisTemplate.hasKey(limitKey))) {
+                return new BaseResult(429, "验证码发送过于频繁，请1分钟后再试", null);
+            }
+            stringRedisTemplate.opsForValue().set(limitKey, "1", 60, TimeUnit.SECONDS);
+            // 1.生成随机四位数验证码
+            String checkCode = RandomUtil.buildCheckCode(4);
+            // 2.发送邮件
+            String text = "<h3>BK商城注册验证码</h3><p>您的注册验证码为：<strong style='color:red;font-size:20px'>" + checkCode + "</strong></p><p>验证码5分钟内有效，请勿泄露给他人。</p>";
+            BaseResult result = mailService.sendMail(email, text, "BK商城注册验证码");
+            // 3.发送成功，将验证码保存到redis中，发送失败，返回发送结果
+            if (200 == result.getCode()){
+                shoppingUserService.saveRegisterCheckCode(email,checkCode);
+                return BaseResult.ok();
+            }else {
+                return result;
+            }
+        } catch (BusException e) {
+            return new BaseResult(e.getCode(), e.getMsg(), null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new BaseResult(500, "邮件服务暂时不可用，请稍后重试", null);
         }
     }
 
@@ -91,19 +99,26 @@ public class UserController {
      */
     @GetMapping("/sendLoginCheckCode")
     public BaseResult sendLoginCheckCode(@RequestParam("email") String email){
-        // 1.判断用户邮箱是否存在，状态是否正常
-        shoppingUserService.checkEmail(email);
-        // 2.生成随机四位数验证码
-        String checkCode = RandomUtil.buildCheckCode(4);
-        // 3.发送邮件
-        String text = "<h3>BK商城登录验证码</h3><p>您的登录验证码为：<strong style='color:red;font-size:20px'>" + checkCode + "</strong></p><p>验证码5分钟内有效，请勿泄露给他人。</p>";
-        BaseResult result = mailService.sendMail(email, text, "BK商城登录验证码");
-        // 4.发送成功，将验证码保存到redis中，发送失败，返回发送结果
-        if (200 == result.getCode()){
-            shoppingUserService.saveLoginCheckCode(email,checkCode);
-            return BaseResult.ok();
-        }else {
-            return result;
+        try {
+            // 1.判断用户邮箱是否存在，状态是否正常
+            shoppingUserService.checkEmail(email);
+            // 2.生成随机四位数验证码
+            String checkCode = RandomUtil.buildCheckCode(4);
+            // 3.发送邮件
+            String text = "<h3>BK商城登录验证码</h3><p>您的登录验证码为：<strong style='color:red;font-size:20px'>" + checkCode + "</strong></p><p>验证码5分钟内有效，请勿泄露给他人。</p>";
+            BaseResult result = mailService.sendMail(email, text, "BK商城登录验证码");
+            // 4.发送成功，将验证码保存到redis中，发送失败，返回发送结果
+            if (200 == result.getCode()){
+                shoppingUserService.saveLoginCheckCode(email,checkCode);
+                return BaseResult.ok();
+            }else {
+                return result;
+            }
+        } catch (BusException e) {
+            return new BaseResult(e.getCode(), e.getMsg(), null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new BaseResult(500, "邮件服务暂时不可用，请稍后重试", null);
         }
     }
 
