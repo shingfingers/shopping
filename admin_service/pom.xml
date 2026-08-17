@@ -66,6 +66,29 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
+        <!-- 强制降级 nacos-client 到 2.4.1，解决 3.0.3 中 shaded grpc census 类缺失导致启动失败 -->
+        <!-- 服务端版本是 2.3.2，客户端 2.4.1 兼容性更好 -->
+        <!-- 排除 3 个 Nacos 日志适配器：nacos-client 2.4.1 的 logback-adapter(1.1.0) 与 Spring Boot 3.5 / logback 1.5 不兼容，
+             启动时加载 nacos-logback14.xml 报 [*][variable] already has an associated action supplier -->
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>2.4.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alibaba.nacos</groupId>
+                    <artifactId>nacos-logback-adapter-12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.alibaba.nacos</groupId>
+                    <artifactId>logback-adapter</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.alibaba.nacos</groupId>
+                    <artifactId>nacos-log4j2-adapter</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>com.alibaba.csp</groupId>
             <artifactId>sentinel-spring-webmvc-adapter</artifactId>
