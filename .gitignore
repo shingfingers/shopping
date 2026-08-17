@@ -50,3 +50,11 @@ skywalking-agent/
 .idea/
 baizhan_shopping/
 .reasonix/
+
+### 临时/调试产物 ###
+META-INF/
+hs_err_pid*.log
+*.png.jpg
+dep.txt
+mcp_test_*.txt
+reasonix.toml

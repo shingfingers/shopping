@@ -64,6 +64,7 @@
         <java.version>17</java.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.parameters>true</maven.compiler.parameters>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <dubbo.version>3.3.0</dubbo.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -167,6 +168,21 @@
     </dependencies>
 
 <build>
+    <pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <parameters>true</parameters>
+                </configuration>
+            </plugin>
+        </plugins>
+    </pluginManagement>
     <plugins>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
