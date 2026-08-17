@@ -178,7 +178,12 @@ npm run dev
 - 管理端：8001
 
 ---
+### 界面展示
+登录注册界面：
+<img width="1890" height="913" alt="94ef719193f3f528a9ac37b6ced5f418" src="https://github.com/user-attachments/assets/75ea81b8-c365-41b0-aef9-c8ae9026a7ae" />
 
+
+---
 ## 📄 License
 
 本项目仅供学习与个人实践使用。
