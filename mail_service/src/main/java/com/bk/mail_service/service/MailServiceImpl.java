@@ -16,9 +16,9 @@ import java.util.Properties;
 @DubboService
 @Service
 public class MailServiceImpl implements MailService {
-    @Value("${mail.user}")
+    @Value("${mail.user:}")
     private String USER; // 发件人邮箱地址
-    @Value("${mail.password}")
+    @Value("${mail.password:}")
     private String PASSWORD; // 如果是qq邮箱可以使用客户端授权码
 
     @Override
@@ -27,6 +27,13 @@ public class MailServiceImpl implements MailService {
             final Properties props = new Properties();
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.host", "smtp.qq.com");
+            props.put("mail.smtp.port", "465");
+            props.put("mail.smtp.socketFactory.port", "465");
+            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            // SMTP 连接/读写超时，避免网络异常（如 IPv6 回退、服务器慢响应）时无限等待
+            props.put("mail.smtp.connectiontimeout", "5000");
+            props.put("mail.smtp.timeout", "10000");
+            props.put("mail.smtp.writetimeout", "5000");
 
             // 发件人的账号
             props.put("mail.user", USER);
@@ -43,9 +50,9 @@ public class MailServiceImpl implements MailService {
                     return new PasswordAuthentication(userName, password);
                 }
             };
-            // 开启SSL加密（信任所有证书）
+            // 开启SSL加密
             props.put("mail.smtp.ssl.enable", "true");
-            props.put("mail.smtp.ssl.trust", "*");
+            props.put("mail.smtp.ssl.trust", "smtp.qq.com");
 
             // 使用环境属性和授权信息，创建邮件会话
             Session mailSession = Session.getInstance(props, authenticator);
