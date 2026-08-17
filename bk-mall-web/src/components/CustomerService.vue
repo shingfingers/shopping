@@ -43,6 +43,16 @@
               <div v-if="msg.action" class="cs-action">
                 <el-button type="primary" size="small" round @click="confirmBuyNow(msg.action)">立即购买《{{ msg.action.name }}》</el-button>
               </div>
+              <div v-if="msg.orders && msg.orders.length" class="cs-orders">
+                <div
+                  v-for="(o, i) in msg.orders"
+                  :key="i"
+                  class="cs-order-item"
+                  @click="viewOrderDetail(o.id)"
+                >
+                  {{ o.text }}
+                </div>
+              </div>
               <div class="cs-time">{{ formatTime(msg.createdAt) }}</div>
             </div>
           </div>
@@ -106,6 +116,7 @@ import { Promotion } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 import request from '@/api/request'
 import { getToken } from '@/utils/auth'
+import { getOrderDetail } from '@/api/order'
 
 // ============= 状态 =============
 const router = useRouter()
@@ -229,14 +240,22 @@ async function sendMessage(text) {
     const answer = res?.data || (typeof res === 'string' ? res : null)
     if (answer) {
       // 解析 BUY_NOW 标记（立即购买跳转，需用户同意）
-      const actionMatch = answer.match(/【BUY_NOW:(\d+):([^】]+)】/)
-      const action = actionMatch ? { id: actionMatch[1], name: actionMatch[2] } : null
-      const cleanAnswer = action ? answer.replace(/【BUY_NOW:[^】]*】/g, '') : answer
+      const actionMatch = answer.match(/【BUY_NOW:(\d+):([^:】]+):(\d+)】/)
+      const action = actionMatch ? { id: actionMatch[1], name: actionMatch[2], qty: Number(actionMatch[3]) || 1 } : null
+      // 解析 ORDER 标记（用户订单列表，可点击查看详情）
+      const orders = []
+      const orderRe = /【ORDER:([^:】]+):([^】]+)】/g
+      let m
+      while ((m = orderRe.exec(answer)) !== null) {
+        orders.push({ id: m[1], text: m[2] })
+      }
+      const cleanAnswer = answer.replace(/【BUY_NOW:[^】]*】/g, '').replace(/【ORDER:[^】]*】/g, '')
       messages.value.push({
         id: messages.value.length + 1,
         role: 'assistant',
         content: cleanAnswer,
         action,
+        orders: orders.length ? orders : null,
         createdAt: Date.now(),
       })
     } else {
@@ -262,7 +281,7 @@ async function confirmBuyNow(action) {
   if (!action) return
   try {
     await ElMessageBox.confirm(
-      `确认立即购买《${action.name}》吗？`,
+      `确认立即购买《${action.name}》×${action.qty || 1} 吗？`,
       '确认购买',
       { confirmButtonText: '去购买', cancelButtonText: '再想想', type: 'info' }
     )
@@ -271,9 +290,42 @@ async function confirmBuyNow(action) {
       router.push({ name: 'Login' })
       return
     }
-    router.push({ name: 'OrderConfirm', query: { productId: action.id, quantity: 1 } })
+    router.push({ name: 'OrderConfirm', query: { productId: action.id, quantity: action.qty || 1 } })
   } catch {
     // 用户取消，不跳转
+  }
+}
+
+// 查看订单详情（在客服对话框内展示）
+async function viewOrderDetail(orderId) {
+  if (!orderId) return
+  try {
+    const res = await getOrderDetail(orderId)
+    const o = res?.data
+    if (!o) {
+      ElMessage.error('订单信息获取失败')
+      return
+    }
+    const goodsText = (o.cartGoods || []).map(g => `${g.goodsName} ×${g.num || 1}`).join('、')
+    const statusMap = { 1: '待付款', 2: '已付款', 3: '未发货', 4: '已发货', 5: '交易成功', 6: '交易关闭', 7: '待评价' }
+    const detailText = [
+      '📦 订单详情：',
+      `商品：${goodsText || '-'}`,
+      `金额：¥${o.payment ?? '-'}`,
+      `状态：${statusMap[o.status] || '未知'}`,
+      `下单时间：${o.createTime ? String(o.createTime).slice(0, 19) : '-'}`,
+      `收货人：${o.receiver || '-'} ${o.receiverMobile || ''}`,
+      `收货地址：${o.receiverAreaName || '-'}`,
+    ].join('\n')
+    messages.value.push({
+      id: messages.value.length + 1,
+      role: 'assistant',
+      content: detailText,
+      createdAt: Date.now(),
+    })
+    scrollToBottom()
+  } catch {
+    ElMessage.error('订单详情获取失败')
   }
 }
 
@@ -449,6 +501,35 @@ onUnmounted(() => {
   line-height: 1.6;
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+.cs-action {
+  margin-top: 8px;
+}
+
+.cs-orders {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cs-order-item {
+  font-size: 12px;
+  padding: 6px 10px;
+  border: 1px solid #e4e7ed;
+  border-radius: 6px;
+  background: #f5f7fa;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: normal;
+  word-break: break-all;
+}
+
+.cs-order-item:hover {
+  border-color: #409eff;
+  color: #409eff;
+  background: #ecf5ff;
 }
 
 .cs-time {

@@ -6,38 +6,40 @@
         <div class="hero-inner">
           <!-- 左侧全部分类 -->
           <div class="category-menu" @mouseleave="activeCategoryId = null">
-            <div
-              v-for="cat in categories"
-              :key="cat.id"
-              class="category-item"
-              :class="{ active: activeCategoryId === cat.id }"
-              @mouseenter="handleCategoryHover(cat)"
-              @click="goToCategory(cat.id)"
-            >
-              <img class="cat-icon" :src="getCategoryIcon(cat.name)" :alt="cat.name" />
-              <span class="cat-name">{{ cat.name }}</span>
-              <el-icon><ArrowRight /></el-icon>
-
-              <!-- 子分类弹出层 -->
-              <transition name="fade">
-                <div v-if="activeCategoryId === cat.id && cat.children?.length" class="sub-category-panel">
-                  <div
-                    v-for="group in chunkArray(cat.children, 8)"
-                    :key="group[0]?.id"
-                    class="sub-cat-group"
-                  >
-                    <a
-                      v-for="child in group"
-                      :key="child.id"
-                      class="sub-cat-item"
-                      @click.stop="goToCategory(child.id)"
-                    >
-                      {{ child.name }}
-                    </a>
-                  </div>
-                </div>
-              </transition>
+            <div class="category-list">
+              <div
+                v-for="cat in categories"
+                :key="cat.id"
+                class="category-item"
+                :class="{ active: activeCategoryId === cat.id }"
+                @mouseenter="handleCategoryHover(cat)"
+                @click="goToCategory(cat.id)"
+              >
+                <img class="cat-icon" :src="getCategoryIcon(cat.name)" :alt="cat.name" />
+                <span class="cat-name">{{ cat.name }}</span>
+                <el-icon><ArrowRight /></el-icon>
+              </div>
             </div>
+
+            <!-- 子分类弹出层（在滚动容器外，避免被裁切） -->
+            <transition name="fade">
+              <div v-if="activeCategory && activeCategory.children?.length" class="sub-category-panel">
+                <div
+                  v-for="group in chunkArray(activeCategory.children, 8)"
+                  :key="group[0]?.id"
+                  class="sub-cat-group"
+                >
+                  <a
+                    v-for="child in group"
+                    :key="child.id"
+                    class="sub-cat-item"
+                    @click.stop="goToCategory(child.id)"
+                  >
+                    {{ child.name }}
+                  </a>
+                </div>
+              </div>
+            </transition>
           </div>
 
           <!-- 轮播Banner -->
@@ -181,22 +183,6 @@
           </div>
         </div>
       </section>
-
-      <!-- 品牌专区 -->
-      <section class="brand-section">
-        <div class="section-inner">
-          <div class="section-header">
-            <h2 class="section-title">品牌专区</h2>
-          </div>
-          <div class="brand-grid">
-            <div v-for="brand in brands" :key="brand.name" class="brand-card">
-              <div class="brand-logo-placeholder">
-                <span>{{ brand.name }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   </DefaultLayout>
 </template>
@@ -210,7 +196,7 @@ import ProductCard from '@/components/ProductCard.vue'
 import Skeleton from '@/components/Skeleton.vue'
 import ErrorState from '@/components/ErrorState.vue'
 import useUserStore from '@/stores/user'
-import { getProductList, getCategoryTree, getProductTypeTree, getBrandList } from '@/api/product'
+import { getProductList, getCategoryTree, getProductTypeTree } from '@/api/product'
 import { getSeckillList } from '@/api/seckill'
 import { generatePlaceholder, getCategoryIcon } from '@/utils/placeholders'
 
@@ -238,6 +224,9 @@ const userStore = useUserStore()
 // ==================== 分类菜单 ====================
 const categories = ref([])
 const activeCategoryId = ref(null)
+const activeCategory = computed(() =>
+  categories.value.find(c => c.id === activeCategoryId.value) || null
+)
 
 // ==================== 轮播Banner ====================
 const banners = ref([
@@ -287,9 +276,6 @@ const loadingMore = ref(false)
 const currentPage = ref(1)
 const pageSize = ref(20)
 const hasMore = ref(true)
-
-// ==================== 品牌 ====================
-const brands = ref([])
 
 // ==================== 方法 ====================
 
@@ -355,21 +341,6 @@ async function loadCategories() {
       { id: 6, name: '食品生鲜' },
       { id: 7, name: '家居家装' },
       { id: 8, name: '图书文娱' },
-    ]
-  }
-}
-
-// 加载品牌列表
-async function loadBrands() {
-  try {
-    const res = await getBrandList()
-    brands.value = res.data || []
-    if (brands.value.length === 0) throw new Error('empty')
-  } catch {
-    brands.value = [
-      { id: 1, name: '华为' }, { id: 2, name: '小米' }, { id: 3, name: '苹果' }, { id: 4, name: '三星' },
-      { id: 5, name: '海尔' }, { id: 6, name: '格力' }, { id: 7, name: '美的' }, { id: 8, name: 'TCL' },
-      { id: 9, name: '耐克' }, { id: 10, name: '阿迪达斯' }, { id: 11, name: '兰蔻' }, { id: 12, name: '雅诗兰黛' },
     ]
   }
 }
@@ -478,7 +449,6 @@ function startNoticeRotation() {
 // ==================== 生命周期 ====================
 onMounted(() => {
   loadCategories()
-  loadBrands()
   loadSeckillProducts()
   startCountdown()
   loadRecommendProducts()
@@ -520,6 +490,31 @@ onUnmounted(() => {
   flex-shrink: 0;
   padding: 6px 0;
   border: 1px solid $border-color-light;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+// 分类列表滚动容器
+.category-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 2px;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $border-color;
+    border-radius: 2px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: $text-placeholder;
+  }
 }
 
 .category-item {
@@ -530,7 +525,6 @@ onUnmounted(() => {
   color: $text-regular;
   cursor: pointer;
   transition: $transition-fast;
-  position: relative;
   font-size: 13px;
   gap: 8px;
 
@@ -566,7 +560,8 @@ onUnmounted(() => {
   left: 100%;
   top: 0;
   width: 460px;
-  min-height: 100%;
+  min-height: 200px;
+  max-height: 100%;
   background: #fff;
   border-radius: 0 $border-radius-small $border-radius-small $border-radius-small;
   box-shadow: $shadow-dark;
@@ -698,7 +693,7 @@ onUnmounted(() => {
   background: #fff;
   padding: 20px 0;
   border-top: 1px solid $border-color-light;
-  margin-top: 12px;
+  margin-top: 16px;
 
   .section-inner {
     width: $layout-width;
@@ -858,70 +853,6 @@ onUnmounted(() => {
   }
 }
 
-// ==================== 品牌专区 ====================
-.brand-section {
-  background: #fff;
-  margin-top: 12px;
-  padding: 28px 0;
-
-  .section-inner {
-    width: $layout-width;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  .brand-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 16px;
-  }
-
-  .brand-card {
-    border: 1px solid $border-color-light;
-    border-radius: $border-radius-small;
-    @include flex-center;
-    flex-direction: column;
-    gap: 10px;
-    padding: 24px;
-    cursor: pointer;
-    transition: $transition-base;
-
-    &:hover {
-      border-color: $primary-light;
-      box-shadow: $shadow-md;
-      transform: translateY(-1px);
-    }
-
-    .brand-logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      @include flex-center;
-      color: #fff;
-      font-size: 20px;
-      font-weight: 700;
-    }
-
-    .brand-logo-placeholder {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      @include flex-center;
-      background: $bg-color;
-      color: $text-secondary;
-      font-size: 14px;
-      font-weight: 600;
-      border: 2px solid $border-color-light;
-    }
-
-    .brand-name {
-      font-size: 13px;
-      color: $text-regular;
-      font-weight: 500;
-    }
-  }
-}
-
 // ==================== 通用 ====================
 .empty-data {
   grid-column: 1 / -1;
@@ -947,11 +878,9 @@ onUnmounted(() => {
   .hero-section .hero-inner { width: 100%; }
   .hero-sidebar { width: 170px; }
   .category-menu { width: 170px; }
-  .brand-section .brand-grid { grid-template-columns: repeat(4, 1fr); }
   .quick-entries .section-inner,
   .seckill-section .section-inner,
-  .recommend-section .section-inner,
-  .brand-section .section-inner { width: 100%; }
+  .recommend-section .section-inner { width: 100%; }
 }
 
 @include respond-to('mobile') {
@@ -985,7 +914,6 @@ onUnmounted(() => {
 
   .seckill-section .seckill-products { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .recommend-section .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; min-height: 200px; }
-  .brand-section .brand-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
 
   .section-header {
     margin-bottom: 12px;
@@ -995,14 +923,12 @@ onUnmounted(() => {
   }
 
   .seckill-section,
-  .recommend-section,
-  .brand-section {
+  .recommend-section {
     padding: 18px 0;
     margin-top: 8px;
   }
 
   .seckill-section .section-inner,
-  .recommend-section .section-inner,
-  .brand-section .section-inner { width: 100%; padding: 0 12px; }
+  .recommend-section .section-inner { width: 100%; padding: 0 12px; }
 }
 </style>

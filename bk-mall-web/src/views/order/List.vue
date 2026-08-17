@@ -124,11 +124,11 @@ const currentPage = ref(1)
 const pageSize = 10
 const total = ref(0)
 
-const placeholderImage = 'data:image/svg+xml,' + encodeURIComponent(
+const placeholderImage = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60">' +
   '<rect fill="#f5f5f5" width="60" height="60"/><text fill="#ccc" x="50%" y="50%" ' +
   'text-anchor="middle" dy=".3em" font-size="8">暂无</text></svg>'
-)
+)))
 
 function statusText(status) {
   const map = {

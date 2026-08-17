@@ -133,11 +133,11 @@ const router = useRouter()
 const cartStore = useCartStore()
 const userStore = useUserStore()
 
-const placeholderImage = 'data:image/svg+xml,' + encodeURIComponent(
+const placeholderImage = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">' +
   '<rect fill="#f5f5f5" width="80" height="80"/><text fill="#ccc" x="50%" y="50%" ' +
   'text-anchor="middle" dy=".3em" font-size="10">暂无</text></svg>'
-)
+)))
 
 // 全选状态（修复：有正确 getter/setter 的 computed）
 const allSelected = computed(() => {

@@ -110,6 +110,19 @@ const useUserStore = defineStore('user', () => {
   }
 
   /**
+   * 更新用户资料（保存到本地持久化）
+   * 由于后端暂无资料更新接口，昵称/头像/邮箱/手机号在前端本地更新
+   * @param {Object} data - 需要更新的字段
+   */
+  function updateProfile(data = {}) {
+    if (data.username !== undefined) username.value = data.username
+    if (data.email !== undefined) email.value = data.email
+    if (data.phone !== undefined) phone.value = data.phone
+    if (data.avatar !== undefined) avatar.value = data.avatar
+    return true
+  }
+
+  /**
    * 退出登录
    * 清除token、重置状态、跳转登录页
    * 注意：使用 window.location 跳转，因为 store 中不能使用 useRouter()
@@ -158,6 +171,7 @@ const useUserStore = defineStore('user', () => {
     loginByCode,
     register,
     fetchUserInfo,
+    updateProfile,
     logout,
     resetState,
   }

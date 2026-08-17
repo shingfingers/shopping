@@ -55,6 +55,59 @@ const CATEGORY_MAP = [
 // ===== 默认占位 =====
 const DEFAULT = { icon: '📦', cat: '商品', bg: '#e0e0e0' }
 
+// ===== 内网图片不可访问时，按商品名关键词匹配本地真实图片 =====
+// public/product-images 目录下的本地图片，浏览器可直接加载
+const LOCAL_IMAGE_MAP = [
+  { keywords: ['iphone14', 'iphone 14'], img: '/product-images/iphone16-standard.jpg' },
+  { keywords: ['iphone13 pro', 'iphone 13 pro'], img: '/product-images/iphone13-pro-blue.jpg' },
+  { keywords: ['iphone15 pro', 'iphone 15 pro'], img: '/product-images/iphone13-pro-colors.jpg' },
+  { keywords: ['iphone15', 'iphone 15'], img: '/product-images/iphone13-blue.jpg' },
+  { keywords: ['iphone16 pro', 'iphone 16 pro'], img: '/product-images/iphone16-pro-titanium.jpg' },
+  { keywords: ['iphone16', 'iphone 16'], img: '/product-images/iphone16-standard.jpg' },
+  { keywords: ['iphone13', 'iphone 13'], img: '/product-images/iphone13-blue.jpg' },
+  { keywords: ['huawei mate40', 'mate 40'], img: '/product-images/huawei-mate40.jpg' },
+  { keywords: ['mate60'], img: '/product-images/huawei-mate60-pro.jpg' },
+  { keywords: ['pura70'], img: '/product-images/huawei-pura70.jpg' },
+  { keywords: ['p50'], img: '/product-images/huawei-p50-pro-white.jpg' },
+  { keywords: ['matepad'], img: '/product-images/huawei-matepad-pro.jpg' },
+  { keywords: ['redmi k70'], img: '/product-images/redmi-k70.jpg' },
+  { keywords: ['xiaomi14'], img: '/product-images/xiaomi14-ultra.jpg' },
+  { keywords: ['vivo x100'], img: '/product-images/vivo-x100.jpg' },
+  { keywords: ['samsung s24'], img: '/product-images/samsung-s24-ultra.jpg' },
+  { keywords: ['samsung zfold'], img: '/product-images/samsung-zfold.jpg' },
+  { keywords: ['meizu21'], img: '/product-images/meizu-21.jpg' },
+  { keywords: ['watch gt'], img: '/product-images/huawei-watch-gt.jpg' },
+  { keywords: ['apple watch'], img: '/product-images/apple-watch-ultra.jpg' },
+  { keywords: ['xiaomi band'], img: '/product-images/xiaomi-band.jpg' },
+  { keywords: ['airpods pro'], img: '/product-images/airpods-pro-2.jpg' },
+  { keywords: ['airpods max'], img: '/product-images/airpods-max.jpg' },
+  { keywords: ['ipad pro'], img: '/product-images/ipad-pro-m4.jpg' },
+  { keywords: ['ipad'], img: '/product-images/ipad.jpg' },
+  { keywords: ['macbook air'], img: '/product-images/macbook-air-m3.jpg' },
+  { keywords: ['macbook pro'], img: '/product-images/macbook-pro-m3.jpg' },
+  { keywords: ['thinkpad'], img: '/product-images/thinkpad-x1.jpg' },
+  { keywords: ['lenovo legion'], img: '/product-images/lenovo-legion.jpg' },
+  { keywords: ['sony a7'], img: '/product-images/sony-a7m4.jpg' },
+  { keywords: ['dji'], img: '/product-images/dji-mini4.jpg' },
+  { keywords: ['戴森', 'dyson'], img: '/product-images/vacuum.jpg' },
+  { keywords: ['海尔', 'haier'], img: '/product-images/haier-fridge.jpg' },
+  { keywords: ['tcl电视'], img: '/product-images/tcl-tv-85.jpg' },
+  { keywords: ['飞利浦', 'philips'], img: '/product-images/philips-monitor.jpg' },
+]
+
+/**
+ * 匹配商品对应的本地真实图片（商品名关键词）
+ */
+export function matchLocalImage(name = '') {
+  const n = name.toLowerCase()
+  for (const item of LOCAL_IMAGE_MAP) {
+    if (item.keywords.some(k => n.includes(k))) {
+      return item.img
+    }
+  }
+  return null
+}
+
 /**
  * 匹配商品对应的品类配置
  */
@@ -126,7 +179,7 @@ export function generatePlaceholder(name = '', w = 400, h = 400) {
     <text x="${w * 0.5}" y="${h * 0.82}" font-size="${w * 0.035}" fill="#bbb" text-anchor="middle" dominant-baseline="central">${name.length > 12 ? name.slice(0, 10) + '...' : name || '商品图片'}</text>
   </svg>`
 
-  return `data:image/svg+xml,${encodeURIComponent(svg)}`
+  return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`
 }
 
 /**
@@ -135,6 +188,9 @@ export function generatePlaceholder(name = '', w = 400, h = 400) {
  */
 export function getProductImage(product) {
   if (!product) return generatePlaceholder('', 400, 400)
+
+  // 商品名称（与 ProductCard 显示一致）
+  const name = product.name || product.goodsName || product.title || ''
 
   // 从多个可能的字段取图片
   const url = product.mainImage || product.headerPic || product.image || product.pic || ''
@@ -151,15 +207,15 @@ export function getProductImage(product) {
 
   // 其他可访问的 http/https 图片，直接使用
   if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-    // 内网地址（192.168.开头）无法访问，用占位图
+    // 内网地址（192.168.开头）无法访问，优先用本地真实图片，没有再用占位图
     if (url.includes('192.168.') || url.includes('127.0.0.1')) {
-      return generatePlaceholder(product.name || product.goodsName || '', 400, 400)
+      return matchLocalImage(name) || generatePlaceholder(name, 400, 400)
     }
     return url
   }
 
-  // 无有效图片，用占位图
-  return generatePlaceholder(product.name || product.goodsName || '', 400, 400)
+  // 无有效图片，优先用本地真实图片，没有再用占位图
+  return matchLocalImage(name) || generatePlaceholder(name, 400, 400)
 }
 
 /**
@@ -234,5 +290,5 @@ export function getCategoryIcon(categoryName) {
     <text x="16" y="16" font-size="16" text-anchor="middle" dominant-baseline="central">${emoji}</text>
   </svg>`
 
-  return `data:image/svg+xml,${encodeURIComponent(svg)}`
+  return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`
 }

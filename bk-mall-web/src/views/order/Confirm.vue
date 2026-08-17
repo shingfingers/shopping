@@ -117,7 +117,14 @@
                     <p class="goods-spec" v-if="item.spec">规格：{{ item.spec }}</p>
                   </div>
                   <span class="goods-price">¥{{ formatPrice(item.price) }}</span>
-                  <span class="goods-quantity">× {{ item.quantity }}</span>
+                  <el-input-number
+                    class="goods-quantity"
+                    :model-value="item.quantity"
+                    :min="1"
+                    :max="99"
+                    size="small"
+                    @change="(val) => onQuantityChange(item, val)"
+                  />
                   <span class="goods-subtotal">¥{{ formatPrice(item.price * item.quantity) }}</span>
                 </div>
               </div>
@@ -206,11 +213,11 @@ const userStore = useUserStore()
 
 const submitting = ref(false)
 const payMethod = ref('alipay')
-const placeholderImage = 'data:image/svg+xml,' + encodeURIComponent(
+const placeholderImage = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60">' +
   '<rect fill="#f5f5f5" width="60" height="60"/><text fill="#ccc" x="50%" y="50%" ' +
   'text-anchor="middle" dy=".3em" font-size="8">暂无</text></svg>'
-)
+)))
 
 const paymentMethods = [
   { label: '支付宝', value: 'alipay', icon: 'BankCard' },
@@ -244,6 +251,49 @@ async function loadAddresses() {
   } finally {
     addressLoading.value = false
   }
+}
+
+// 省市区离线降级数据（后端 order_customer_api 未启动时使用）
+// 结构对齐后端：Province { id, provinceName } / City { id, city, provinceId } / Area { id, area, cityId }
+const FALLBACK_REGION = {
+  provinces: [
+    { id: 1, provinceName: '北京市' },
+    { id: 2, provinceName: '上海市' },
+    { id: 3, provinceName: '广东省' },
+    { id: 4, provinceName: '浙江省' },
+    { id: 5, provinceName: '江苏省' },
+    { id: 6, provinceName: '四川省' },
+  ],
+  cities: [
+    { id: 101, city: '北京市', provinceId: 1 },
+    { id: 201, city: '上海市', provinceId: 2 },
+    { id: 301, city: '广州市', provinceId: 3 },
+    { id: 302, city: '深圳市', provinceId: 3 },
+    { id: 401, city: '杭州市', provinceId: 4 },
+    { id: 402, city: '宁波市', provinceId: 4 },
+    { id: 501, city: '南京市', provinceId: 5 },
+    { id: 502, city: '苏州市', provinceId: 5 },
+    { id: 601, city: '成都市', provinceId: 6 },
+  ],
+  areas: [
+    { id: 1001, area: '东城区', cityId: 101 },
+    { id: 1002, area: '西城区', cityId: 101 },
+    { id: 1003, area: '海淀区', cityId: 101 },
+    { id: 2001, area: '黄浦区', cityId: 201 },
+    { id: 2002, area: '浦东新区', cityId: 201 },
+    { id: 3001, area: '天河区', cityId: 301 },
+    { id: 3002, area: '越秀区', cityId: 301 },
+    { id: 3003, area: '南山区', cityId: 302 },
+    { id: 3004, area: '福田区', cityId: 302 },
+    { id: 4001, area: '西湖区', cityId: 401 },
+    { id: 4002, area: '滨江区', cityId: 401 },
+    { id: 4003, area: '海曙区', cityId: 402 },
+    { id: 5001, area: '玄武区', cityId: 501 },
+    { id: 5002, area: '鼓楼区', cityId: 501 },
+    { id: 5003, area: '吴中区', cityId: 502 },
+    { id: 6001, area: '锦江区', cityId: 601 },
+    { id: 6002, area: '武侯区', cityId: 601 },
+  ],
 }
 
 // 新增/编辑地址弹窗
@@ -292,8 +342,17 @@ function validateRegion() {
 
 async function ensureProvinces() {
   if (provinces.value.length > 0) return
-  const res = await getAllProvinces()
-  provinces.value = res.data || []
+  try {
+    const res = await getAllProvinces()
+    if (res.data && res.data.length > 0) {
+      provinces.value = res.data || []
+    } else {
+      provinces.value = FALLBACK_REGION.provinces
+    }
+  } catch (error) {
+    // 离线降级：使用本地省份数据，保证下拉可用
+    provinces.value = FALLBACK_REGION.provinces
+  }
 }
 
 async function onProvinceChange() {
@@ -306,10 +365,14 @@ async function onProvinceChange() {
   try {
     regionLoading.value = true
     const res = await getCitiesByProvince(addressForm.value.provinceId)
-    cities.value = res.data || []
+    if (res.data && res.data.length > 0) {
+      cities.value = res.data || []
+    } else {
+      cities.value = FALLBACK_REGION.cities.filter(c => c.provinceId === addressForm.value.provinceId)
+    }
   } catch (error) {
-    if (error?.__offline) ElMessage.warning('网络异常，城市加载失败')
-    else ElMessage.error('城市加载失败')
+    // 离线降级：使用本地城市数据
+    cities.value = FALLBACK_REGION.cities.filter(c => c.provinceId === addressForm.value.provinceId)
   } finally {
     regionLoading.value = false
   }
@@ -323,10 +386,14 @@ async function onCityChange() {
   try {
     regionLoading.value = true
     const res = await getAreasByCity(addressForm.value.cityId)
-    areas.value = res.data || []
+    if (res.data && res.data.length > 0) {
+      areas.value = res.data || []
+    } else {
+      areas.value = FALLBACK_REGION.areas.filter(a => a.cityId === addressForm.value.cityId)
+    }
   } catch (error) {
-    if (error?.__offline) ElMessage.warning('网络异常，区县加载失败')
-    else ElMessage.error('区县加载失败')
+    // 离线降级：使用本地区县数据
+    areas.value = FALLBACK_REGION.areas.filter(a => a.cityId === addressForm.value.cityId)
   } finally {
     regionLoading.value = false
   }
@@ -370,14 +437,26 @@ async function openEditDialog(addr) {
     const province = provinces.value.find(p => p.provinceName === addr.provinceName)
     if (province) {
       addressForm.value.provinceId = province.id
-      const cityRes = await getCitiesByProvince(province.id)
-      cities.value = cityRes.data || []
-      const city = cities.value.find(c => c.city === addr.cityName)
+      let cityList
+      try {
+        const cityRes = await getCitiesByProvince(province.id)
+        cityList = (cityRes.data && cityRes.data.length > 0) ? cityRes.data : FALLBACK_REGION.cities.filter(c => c.provinceId === province.id)
+      } catch {
+        cityList = FALLBACK_REGION.cities.filter(c => c.provinceId === province.id)
+      }
+      cities.value = cityList
+      const city = cityList.find(c => c.city === addr.cityName)
       if (city) {
         addressForm.value.cityId = city.id
-        const areaRes = await getAreasByCity(city.id)
-        areas.value = areaRes.data || []
-        const area = areas.value.find(a => a.area === addr.areaName)
+        let areaList
+        try {
+          const areaRes = await getAreasByCity(city.id)
+          areaList = (areaRes.data && areaRes.data.length > 0) ? areaRes.data : FALLBACK_REGION.areas.filter(a => a.cityId === city.id)
+        } catch {
+          areaList = FALLBACK_REGION.areas.filter(a => a.cityId === city.id)
+        }
+        areas.value = areaList
+        const area = areaList.find(a => a.area === addr.areaName)
         if (area) addressForm.value.areaId = area.id
       }
     }
@@ -447,7 +526,9 @@ async function handleDeleteAddress(addr) {
 }
 
 // 订单商品
-const orderItems = computed(() => {
+const orderItems = ref([])
+// 构建订单商品列表（购物车选中 或 立即购买场景），并支持在确认页修改数量
+function buildOrderItems() {
   // 从购物车获取已选中商品（字段映射：goodId/num → id/quantity）
   const selected = cartStore.items
     .filter(i => i.selected)
@@ -462,12 +543,15 @@ const orderItems = computed(() => {
       headerPic: i.headerPic,
       spec: i.spec,
     }))
-  if (selected.length > 0) return selected
+  if (selected.length > 0) {
+    orderItems.value = selected
+    return
+  }
 
   // 从URL参数获取（立即购买场景）—— 用已加载的商品信息
   const productId = route.query.productId
   if (productId && buyNowProduct.value) {
-    return [{
+    orderItems.value = [{
       id: productId,
       goodId: productId,
       name: buyNowProduct.value.goodsName || buyNowProduct.value.name,
@@ -477,10 +561,16 @@ const orderItems = computed(() => {
       mainImage: buyNowProduct.value.headerPic || buyNowProduct.value.mainImage,
       headerPic: buyNowProduct.value.headerPic || buyNowProduct.value.mainImage,
     }]
+    return
   }
 
-  return []
-})
+  orderItems.value = []
+}
+
+// 修改数量（确认页支持多件下单）
+function onQuantityChange(item, val) {
+  item.quantity = Math.max(1, Number(val) || 1)
+}
 
 // 立即购买场景：根据 URL productId 加载商品详情
 const buyNowProduct = ref(null)
@@ -559,6 +649,7 @@ onMounted(async () => {
   if (!route.query.productId) {
     await cartStore.fetchCartList()
   }
+  buildOrderItems()
   loadAddresses()
 })
 </script>
@@ -700,7 +791,8 @@ onMounted(async () => {
   }
 
   .goods-price { color: $text-regular; font-size: 13px; width: 80px; text-align: right; }
-  .goods-quantity { color: $text-secondary; font-size: 13px; width: 50px; text-align: center; }
+  .goods-quantity { color: $text-secondary; font-size: 13px; width: 110px; text-align: center; }
+  .goods-quantity :deep(.el-input__inner) { text-align: center; padding: 0 20px; }
   .goods-subtotal { color: $danger-color; font-weight: 600; font-size: 14px; width: 90px; text-align: right; }
 }
 

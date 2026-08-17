@@ -204,7 +204,7 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import useCartStore from '@/stores/cart'
 import useUserStore from '@/stores/user'
 import { getProductDetail } from '@/api/product'
-import { generatePlaceholder, getProductImages, getBrandColor } from '@/utils/placeholders'
+import { generatePlaceholder, getProductImages, getBrandColor, matchLocalImage } from '@/utils/placeholders'
 import { formatPrice } from '@/utils/format'
 
 const route = useRoute()
@@ -300,12 +300,17 @@ async function loadProduct() {
       throw new Error('商品详情获取失败')
     }
     // 后端 GoodsDesc 字段映射为前端期望的字段名
-    const headerPic = data.headerPic || data.mainImage || ''
+    // 过滤内网 FastDFS 地址（前端无法访问），用占位图替代
+    const rawHeaderPic = data.headerPic || data.mainImage || ''
+    const isInternal = url => !url || url.includes('192.168.') || url.includes('127.0.0.1')
+    const headerPic = isInternal(rawHeaderPic)
+      ? matchLocalImage(data.goodsName || data.name || '') || generatePlaceholder(data.goodsName || data.name || '', 600, 600)
+      : rawHeaderPic
     // images 是 List<GoodsImage> 对象数组，提取 imageUrl
     // 过滤掉内网 FastDFS 地址（前端无法访问），只保留可访问的真实图片
     const imageUrls = (data.images || [])
       .map(i => i.imageUrl || i)
-      .filter(url => url && !url.includes('192.168.') && !url.includes('127.0.0.1'))
+      .filter(url => url && !isInternal(url))
     const allImages = [headerPic, ...imageUrls].filter(Boolean)
     // 品牌对象取 name
     const brandName = typeof data.brand === 'object' ? data.brand?.name : data.brand

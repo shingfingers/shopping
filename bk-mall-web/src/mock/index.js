@@ -32,7 +32,7 @@ function getBannerImage(index = 0) {
     <text x="50%" y="62%" font-size="36" fill="#fff" text-anchor="middle" dominant-baseline="central" font-weight="700">${b.text}</text>
     <text x="50%" y="76%" font-size="16" fill="rgba(255,255,255,0.5)" text-anchor="middle" dominant-baseline="central">BK商城 - 品质生活，尽在BK</text>
   </svg>`
-  return `data:image/svg+xml,${encodeURIComponent(svg)}`
+  return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`
 }
 
 // ==================== 分类数据（来自 bz_product_type） ====================
@@ -86,6 +86,7 @@ export const goods = [
     stockCount: 500,
     tag: '热卖',
     isMarketable: true,
+    mainImage: '/product-images/iphone16-standard.jpg',
   },
   {
     id: 149187842867963,

@@ -32,6 +32,18 @@ const routes = [
     meta: { title: '注册 - BK商城', guest: true },
   },
   {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('@/views/user/Profile.vue'),
+    meta: { title: '个人中心 - BK商城', auth: true },
+  },
+  {
+    path: '/profile/address',
+    name: 'UserAddress',
+    component: () => import('@/views/user/Address.vue'),
+    meta: { title: '收货地址管理 - BK商城', auth: true },
+  },
+  {
     path: '/products',
     name: 'ProductList',
     component: () => import('@/views/product/List.vue'),

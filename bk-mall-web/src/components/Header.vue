@@ -12,7 +12,7 @@
           <template v-if="userStore.isLoggedIn">
             <el-dropdown trigger="click" @command="handleUserCommand">
               <span class="user-info">
-                <el-avatar :size="22" :src="userStore.avatar" />
+                <span class="header-avatar" :style="avatarStyle">{{ avatarEmoji }}</span>
                 <span class="username">{{ userStore.displayName }}</span>
                 <el-icon :size="14"><ArrowDown /></el-icon>
               </span>
@@ -209,6 +209,7 @@ import { Search } from '@element-plus/icons-vue'
 import { onClickOutside } from '@vueuse/core'
 import useUserStore from '@/stores/user'
 import useCartStore from '@/stores/cart'
+import { getAvatarStyle, getAvatarEmoji } from '@/utils/avatar'
 import { getProductTypeTree, autoSuggest } from '@/api/product'
 import {
   getSearchHistory,
@@ -221,6 +222,10 @@ const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
 const cartStore = useCartStore()
+
+// 头像渐变背景与 emoji
+const avatarStyle = computed(() => getAvatarStyle(userStore.avatar))
+const avatarEmoji = computed(() => getAvatarEmoji(userStore.avatar))
 
 const keyword = ref('')
 const showDropdown = ref(false)
@@ -307,7 +312,7 @@ function handleNavSelect(index) {
 function handleUserCommand(command) {
   switch (command) {
     case 'orders': router.push('/orders'); break
-    case 'profile': router.push({ name: 'OrderList' }); break
+    case 'profile': router.push('/profile'); break
     case 'logout': userStore.logout(); ElMessage.success('已安全退出'); break
   }
 }
@@ -373,6 +378,19 @@ function closeAll() { showDropdown.value = false; mobileNavOpen.value = false }
   transition: $transition-fast;
   &:hover { color: $primary-color; background: $primary-bg; }
   .username { max-width: 100px; @include text-ellipsis; }
+  .header-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 1;
+    color: #fff;
+    background: linear-gradient(135deg,#3b82f6,#60a5fa);
+    flex-shrink: 0;
+  }
 }
 
 // ========== 主导航区 ==========

@@ -136,7 +136,7 @@ function generateQrCode() {
     <rect x="60" y="64" width="4" height="4" fill="#333"/>
     <rect x="68" y="68" width="4" height="4" fill="#333"/>
   </svg>`
-  return 'data:image/svg+xml,' + encodeURIComponent(svg)
+  return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`
 }
 const qrCodeImage = generateQrCode()
 </script>

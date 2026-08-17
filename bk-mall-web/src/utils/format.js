@@ -51,5 +51,5 @@ export function generateSimplePlaceholder(text = '暂无', w = 80, h = 80) {
     <rect fill="#f5f5f5" width="${w}" height="${h}"/>
     <text fill="#ccc" x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="${Math.floor(w / 8)}">${text}</text>
   </svg>`
-  return `data:image/svg+xml,${encodeURIComponent(svg)}`
+  return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`
 }

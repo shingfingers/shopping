@@ -3,7 +3,7 @@
     <!-- 商品图片（使用智能占位图） -->
     <div class="product-card__image">
       <img
-        v-lazy="productImage"
+        v-lazy="{ src: productImage, error: errorImage }"
         :alt="product.name || product.goodsName || product.title"
       />
       <!-- 标签 -->
@@ -50,7 +50,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { getProductImage, getBrandColor } from '@/utils/placeholders'
+import { getProductImage, generatePlaceholder, getBrandColor } from '@/utils/placeholders'
 import { formatPrice } from '@/utils/format'
 
 const props = defineProps({
@@ -68,6 +68,12 @@ const router = useRouter()
 
 // 使用智能图片选择：真实图 → 品牌色品类占位图
 const productImage = computed(() => getProductImage(props.product))
+
+// 图片加载失败时的回退占位图
+const errorImage = computed(() => {
+  const name = props.product.name || props.product.goodsName || props.product.title || ''
+  return generatePlaceholder(name, 400, 400)
+})
 
 // 品牌色
 const currentPrice = computed(() => {

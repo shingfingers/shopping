@@ -12,7 +12,7 @@
         <!-- 秒杀详情区 -->
         <div class="seckill-detail-section">
           <div class="detail-left">
-            <img :src="product.mainImage || product.headerPic || placeholderImage" :alt="product.name" />
+            <img :src="product.mainImage || product.headerPic || placeholderImage" :alt="product.name" @error="handleImageError" />
           </div>
 
           <div class="detail-center">
@@ -115,7 +115,7 @@ import { ElMessage } from 'element-plus'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import useUserStore from '@/stores/user'
 import { getSeckillDetail, buySeckill, paySeckill } from '@/api/seckill'
-import { generatePlaceholder } from '@/utils/placeholders'
+import { generatePlaceholder, matchLocalImage } from '@/utils/placeholders'
 import { formatPrice } from '@/utils/format'
 
 const route = useRoute()
@@ -131,11 +131,11 @@ const paying = ref(false)
 const orderId = ref('')
 const remainingSeconds = ref(7200) // 默认2小时
 
-const placeholderImage = 'data:image/svg+xml,' + encodeURIComponent(
+const placeholderImage = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">' +
   '<rect fill="#f5f5f5" width="400" height="400"/><text fill="#ccc" x="50%" y="50%" ' +
   'text-anchor="middle" dy=".3em" font-size="16">暂无</text></svg>'
-)
+)))
 
 const product = ref({
   name: '',
@@ -156,6 +156,14 @@ const seckillPercent = computed(() => {
   return Math.round(((num - (stockCount || 0)) / num) * 100)
 })
 
+// 图片加载失败时回退到占位图，避免裂图
+function handleImageError(e) {
+  const el = e.target
+  if (el && el.src !== placeholderImage) {
+    el.src = placeholderImage
+  }
+}
+
 let countdownTimer = null
 
 function padZero(num) {
@@ -167,6 +175,13 @@ async function loadDetail() {
   try {
     const res = await getSeckillDetail(productId.value)
     product.value = res.data || res
+    // 内网 FastDFS 图片前端无法访问：按商品名匹配本地真实图片，否则生成占位图
+    const name = product.value.name || product.value.goodsName || product.value.title || ''
+    const raw = product.value.mainImage || product.value.headerPic || ''
+    const isInternal = url => !url || url.includes('192.168.') || url.includes('127.0.0.1')
+    if (isInternal(raw)) {
+      product.value.mainImage = matchLocalImage(name) || generatePlaceholder(name, 600, 600)
+    }
   } catch {
     // 模拟数据
     product.value = {

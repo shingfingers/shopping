@@ -7,8 +7,13 @@
  * <img v-lazy="{ src: '...', loading: '...', error: '...' }" />
  */
 
-// 默认占位图（轻量 base64 SVG）
-const DEFAULT_LOADING = 'data:image/svg+xml,' + encodeURIComponent(
+// SVG 转 base64 data URI
+function svgToDataUri(svg) {
+  return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`
+}
+
+// 默认占位图（轻量 SVG）
+const DEFAULT_LOADING = svgToDataUri(
   '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">' +
   '<rect fill="#f5f5f5" width="100" height="100"/>' +
   '<circle fill="#e0e0e0" cx="50" cy="38" r="12"/>' +
@@ -16,7 +21,7 @@ const DEFAULT_LOADING = 'data:image/svg+xml,' + encodeURIComponent(
   '</svg>'
 )
 
-const DEFAULT_ERROR = 'data:image/svg+xml,' + encodeURIComponent(
+const DEFAULT_ERROR = svgToDataUri(
   '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">' +
   '<rect fill="#fafafa" width="100" height="100"/>' +
   '<text fill="#ccc" x="50" y="50" text-anchor="middle" dominant-baseline="central" font-size="12">加载失败</text>' +
