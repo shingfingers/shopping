@@ -64,7 +64,7 @@
 | 前端 | Vue 3 + Vite 5 + Element Plus + Pinia |
 | 微服务框架 | Spring Boot 3.5 + Spring Cloud Alibaba + **Dubbo 3.3** |
 | 注册/配置中心 | **Nacos**（服务端集群化部署） |
-| 数据库 | MySQL 8（库 `baizhanshopping`，表前缀 `bz_`）+ MyBatis-Plus |
+| 数据库 | MySQL 8 + MyBatis-Plus |
 | 搜索引擎 | Elasticsearch 8.4（商品搜索/推荐） |
 | 缓存 | Redis（购物车/秒杀/验证码） |
 | 消息队列 | RocketMQ 5.3（订单超时检查等） |
