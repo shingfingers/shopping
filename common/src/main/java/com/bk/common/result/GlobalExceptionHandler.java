@@ -19,7 +19,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public BaseResult defaultExceptionHandler(Exception e){
         e.printStackTrace();
-        BaseResult baseResult = new BaseResult(CodeEnum.SYSTEM_ERROR.getCode(), CodeEnum.SYSTEM_ERROR.getMessage(), null);
+        String msg = e.getClass().getSimpleName() + ": " + e.getMessage();
+        BaseResult baseResult = new BaseResult(CodeEnum.SYSTEM_ERROR.getCode(), msg, null);
         return baseResult;
     }
 }
