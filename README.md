@@ -15,20 +15,6 @@
 </div>
 
 ---
-
-## 🖥️ 在线体验
-
-本项目已部署上线，可通过公网域名访问完整功能：
-
-| 端 | 地址 |
-|---|---|
-| 前台商城 | <https://your-domain.example.com> |
-| 管理后台 | <https://your-domain.example.com/admin> |
-
-> ℹ️ **占位提示**：请将上述地址替换为你的真实部署域名（可将这里改为跳转链接 `[在线访问](https://your-domain.example.com)`）。
-
----
-
 ## 📸 界面预览
 
 > 截图存放在 [`screenshots/`](screenshots/) 目录，使用**相对路径**引用，随仓库一起提交即可正常显示。
