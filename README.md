@@ -14,9 +14,6 @@
 
 ---
 ## 📸 界面预览
-
-> 截图存放在 [`screenshots/`](screenshots/) 目录，使用**相对路径**引用，随仓库一起提交即可正常显示。
-
 <table>
   <tr>
     <td align="center"><img src="screenshots/home-banner.png" width="420" alt="首页 Banner"/><br/><sub>首页 Banner</sub></td>
