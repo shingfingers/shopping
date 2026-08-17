@@ -181,11 +181,31 @@ npm run dev
 ### 界面展示
 登录注册界面：
 <img width="1890" height="913" alt="94ef719193f3f528a9ac37b6ced5f418" src="https://github.com/user-attachments/assets/75ea81b8-c365-41b0-aef9-c8ae9026a7ae" />
+<img width="1909" height="749" alt="31bace962197fbd236616d904feb1fc7" src="https://github.com/user-attachments/assets/a5d3fe9c-1ac2-4298-bab9-0a8fb5663bd8" />
 <img width="1911" height="914" alt="64e261248aeaed7096164a43182bc632" src="https://github.com/user-attachments/assets/e89100a2-ec6b-4859-ba8d-24148574eb4f" />
+
+主界面：
+<img width="1904" height="904" alt="4fe75cbf021c912fd94b35b9c2dcecd3" src="https://github.com/user-attachments/assets/607d19a6-8b9d-49e3-aeed-3d07d07e8925" />
+<img width="1904" height="904" alt="50b7036642fe6c2a0ce3405b7d3294ef" src="https://github.com/user-attachments/assets/9b8fb3b2-f649-4bd1-9172-fdc0a642ec1b" />
+<img width="1895" height="4102" alt="3ba1c371c3f2f85fbaabbcc46ef2f42c" src="https://github.com/user-attachments/assets/c5da0ed5-5bb4-4964-ab9c-20d33254c5f9" />
+筛选商品：
+<img width="1910" height="1725" alt="24ca345c6e193e67b37a2461e467d08a" src="https://github.com/user-attachments/assets/39946048-9a01-437c-9328-4b75ec2c6766" />
+<img width="1908" height="2035" alt="1a1b2806f49a37a64d8f149b61e5f839" src="https://github.com/user-attachments/assets/7c9a0d1d-5386-4f1d-a298-69494788cf68" />
+搜索商品：
+<img width="1898" height="1739" alt="86f6b875af170003c351535b2d940211" src="https://github.com/user-attachments/assets/ebfa1fc5-974e-44be-bf3a-2f642bf20eb9" />
+秒杀下单：
+<img width="1671" height="860" alt="45042705b4950f4e0f558804c05f5e3a" src="https://github.com/user-attachments/assets/3be6b514-df7f-470d-a2db-e1dfcb5e4f72" />
+个人中心：
+<img width="1689" height="1444" alt="85989b88c8a97b04b5ab40f2b8201b9d" src="https://github.com/user-attachments/assets/285b8d20-fd01-40e9-92a6-0ec514aaee6f" />
+客服AI：
+<img width="477" height="1801" alt="6e2b1aba27f8c58388bb152209512cb8" src="https://github.com/user-attachments/assets/11ab0696-4d05-44e3-b415-4920d3c9615e" />
+<img width="469" height="1246" alt="0d7a92cd5d994fc9a9c30609ac9ee398" src="https://github.com/user-attachments/assets/b1ea4552-0d68-44d8-9202-d73fba327258" />
+管理员界面：
+<img width="1904" height="859" alt="e7810eb6865dd55f341b1260ac6d5e1e" src="https://github.com/user-attachments/assets/36c84e3e-1a22-4f90-a64b-1859dab4b57e" />
+<img width="1898" height="909" alt="屏幕截图 2026-08-17 143323" src="https://github.com/user-attachments/assets/e6583eaa-6690-486f-86cd-0b06b793f410" />
+<img width="1904" height="911" alt="屏幕截图 2026-08-17 143328" src="https://github.com/user-attachments/assets/2a147f0b-f24a-44fb-937e-472d8a10857e" />
+
 
 
 
 ---
-## 📄 License
-
-本项目仅供学习与个人实践使用。
