@@ -10,8 +10,6 @@
 [![Vite](https://img.shields.io/badge/Vite-5-646cff)](https://vitejs.dev/)
 [![License](https://img.shields.io/badge/License-MIT-blue)](#)
 
-一个用于学习和实践的全栈电商平台，覆盖**商品、搜索、购物车、订单、秒杀、支付、AI 客服、个人中心**等完整业务链路。
-
 </div>
 
 ---
