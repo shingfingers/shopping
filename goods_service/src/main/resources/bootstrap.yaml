@@ -10,6 +10,9 @@ spring:
         namespace: ed9ea14a-fdbd-4a79-99ef-847f926b7daa
         file-extension: yaml
         prefix: goods_service
+      discovery:
+        server-addr: 192.168.0.99:8848
+        namespace: ed9ea14a-fdbd-4a79-99ef-847f926b7daa
   config:
     import:
       - optional:nacos:goods_service-dev.yaml
