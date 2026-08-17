@@ -206,6 +206,9 @@ npm run dev
 
 秒杀下单：
 <img width="1671" height="860" alt="45042705b4950f4e0f558804c05f5e3a" src="https://github.com/user-attachments/assets/3be6b514-df7f-470d-a2db-e1dfcb5e4f72" />
+购物车：
+<img width="1908" height="910" alt="978fd69608fda4a2e7876722d0a78a6b" src="https://github.com/user-attachments/assets/dfcd65f4-1f79-4ce9-8824-3a0af2041b84" />
+
 
 
 
